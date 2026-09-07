@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1c3f8f">
+  <meta name="description" content="DISCAP ANMALU: traductor de Lengua de Señas Colombiana (LSC) con Ana Lucía, Antonella y María Paula.">
+  <title>DISCAP ANMALU · Traductor LSC</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ===== Cabecera ===== -->
+<header class="top">
+  <button class="btn-icon" id="btnAtras" aria-label="Volver" hidden>←</button>
+  <a class="marca" href="#inicio">
+    <span class="marca-hand" aria-hidden="true">🤟</span>
+    <span class="marca-texto">DISCAP <b>ANMALU</b></span>
+  </a>
+  <span class="badge-lsc">LSC</span>
+</header>
+
+<main id="app">
+
+  <!-- ===== Pantalla: Inicio ===== -->
+  <section class="pantalla activa" id="inicio">
+    <div class="hero">
+      <div class="hero-avatares" aria-hidden="true">
+        <img src="img/avatares/ana/A.jpg" alt="">
+        <img src="img/avatares/antonella/N.jpg" alt="">
+        <img src="img/avatares/mariapaula/M.jpg" alt="">
+      </div>
+      <h1>Hablemos con las <span>manos</span></h1>
+      <p>Traductor de <strong>Lengua de Señas Colombiana</strong> hecho por Ana Lucía, Antonella y María Paula.</p>
+    </div>
+
+    <nav class="menu-principal" aria-label="Menú principal">
+      <a class="tarjeta-menu traductor" href="#traductor">
+        <span class="emoji" aria-hidden="true">🔤</span>
+        <span class="titulo">Traductor</span>
+        <span class="desc">Escribe una palabra y mírala letra por letra en señas</span>
+      </a>
+      <a class="tarjeta-menu expresiones" href="#expresiones">
+        <span class="emoji" aria-hidden="true">🎬</span>
+        <span class="titulo">Expresiones</span>
+        <span class="desc">Saludos, familia y colores en video</span>
+      </a>
+    </nav>
+
+    <p class="pie-inicio">Proyecto escolar · Feria Inspírate 2026</p>
+  </section>
+
+  <!-- ===== Pantalla: Traductor ===== -->
+  <section class="pantalla" id="traductor">
+    <h2 class="titulo-pantalla">🔤 Traductor</h2>
+
+    <!-- Paso 1: elegir avatar -->
+    <div class="bloque">
+      <h3>1. Elige quién hace las señas</h3>
+      <div class="avatares" role="radiogroup" aria-label="Avatar">
+        <button class="avatar activo" data-avatar="ana" role="radio" aria-checked="true">
+          <img src="img/avatares/ana/A.jpg" alt=""><span>Ana Lucía</span>
+        </button>
+        <button class="avatar" data-avatar="antonella" role="radio" aria-checked="false">
+          <img src="img/avatares/antonella/A.jpg" alt=""><span>Antonella</span>
+        </button>
+        <button class="avatar" data-avatar="mariapaula" role="radio" aria-checked="false">
+          <img src="img/avatares/mariapaula/A.jpg" alt=""><span>María Paula</span>
+        </button>
+        <button class="avatar aleatorio" data-avatar="aleatorio" role="radio" aria-checked="false">
+          <span class="dado" aria-hidden="true">🎲</span><span>Aleatorio</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Paso 2: escribir -->
+    <div class="bloque">
+      <h3>2. Escribe lo que quieres decir</h3>
+      <form class="entrada" id="formTraducir">
+        <input type="text" id="texto" placeholder="Ej: hola mamá" maxlength="60" autocomplete="off" inputmode="text" aria-label="Texto a traducir">
+        <button type="submit" class="btn-primario">Traducir</button>
+      </form>
+      <div class="sugerencias">
+        <span>Prueba:</span>
+        <button type="button" class="chip" data-texto="hola">hola</button>
+        <button type="button" class="chip" data-texto="mamá">mamá</button>
+        <button type="button" class="chip" data-texto="amor">amor</button>
+        <button type="button" class="chip" data-texto="Colombia">Colombia</button>
+      </div>
+    </div>
+
+    <!-- Paso 3: ver -->
+    <div class="bloque escenario" id="escenario" hidden>
+      <div class="tarjeta-sena">
+        <img class="foto-avatar" id="fotoAvatar" alt="Seña hecha por la avatar">
+        <div class="recuadro-formal">
+          <img id="fotoFormal" alt="Seña formal de la letra">
+          <span class="letra-grande" id="letraGrande">A</span>
+        </div>
+        <div class="etiqueta-avatar" id="nombreAvatar">Ana Lucía</div>
+        <div class="aviso-pausa" id="avisoPausa" hidden>espacio</div>
+      </div>
+
+      <div class="palabra-progreso" id="palabraProgreso" aria-live="polite"></div>
+
+      <div class="controles">
+        <button class="btn-icon" id="btnAnterior" aria-label="Letra anterior">⏮</button>
+        <button class="btn-icon grande" id="btnPlay" aria-label="Reproducir">▶</button>
+        <button class="btn-icon" id="btnSiguiente" aria-label="Letra siguiente">⏭</button>
+        <label class="velocidad">
+          <span>Velocidad</span>
+          <input type="range" id="velocidad" min="400" max="2500" step="100" value="1200">
+        </label>
+      </div>
+    </div>
+
+    <!-- Abecedario completo -->
+    <div class="bloque">
+      <h3>Abecedario LSC</h3>
+      <p class="ayuda">Toca una letra para verla.</p>
+      <div class="abecedario" id="abecedario"></div>
+    </div>
+  </section>
+
+  <!-- ===== Pantalla: Expresiones ===== -->
+  <section class="pantalla" id="expresiones">
+    <h2 class="titulo-pantalla">🎬 Expresiones</h2>
+
+    <div class="categorias" id="categorias">
+      <button class="categoria activo" data-categoria="saludos">
+        <span class="emoji" aria-hidden="true">👋</span>Saludos
+      </button>
+      <button class="categoria" data-categoria="familia">
+        <span class="emoji" aria-hidden="true">👨‍👩‍👧</span>Familia
+      </button>
+      <button class="categoria" data-categoria="colores">
+        <span class="emoji" aria-hidden="true">🎨</span>Colores
+      </button>
+    </div>
+
+    <div class="reproductor" id="reproductor" hidden>
+      <video id="video" playsinline controls preload="metadata"></video>
+      <div class="video-titulo" id="videoTitulo"></div>
+    </div>
+
+    <div class="expresiones-lista" id="listaExpresiones"></div>
+  </section>
+
+</main>
+
+<footer class="pie">
+  <span>DISCAP ANMALU © 2026</span>
+  <a href="https://github.com/EVA2080AI/discap-anmalu/issues" target="_blank" rel="noopener">Sugerir mejora</a>
+</footer>
+
+<script src="js/datos.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
