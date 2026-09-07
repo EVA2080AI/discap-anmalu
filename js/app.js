@@ -132,14 +132,14 @@ function pintarSena(letra, avatarId) {
 
   tarjeta.classList.toggle("solo-formal", sinAvatar);
   $("#letraGrande").textContent = letra;
-  $("#fotoFormal").src = `img/senas/${encodeURIComponent(letra)}.jpg`;
+  $("#fotoFormal").src = `img/senas/${archivoLetra(letra)}.jpg`;
   $("#fotoFormal").alt = `Seña formal de la letra ${letra}`;
 
   if (sinAvatar) {
     $("#fotoAvatar").removeAttribute("src");
     $("#nombreAvatar").textContent = "Seña formal (sin foto de avatar)";
   } else {
-    $("#fotoAvatar").src = `img/avatares/${avatar.carpeta}/${letra}.jpg`;
+    $("#fotoAvatar").src = `img/avatares/${avatar.carpeta}/${archivoLetra(letra)}.jpg`;
     $("#fotoAvatar").alt = `${avatar.nombre} haciendo la letra ${letra}`;
     $("#nombreAvatar").textContent = avatar.nombre;
   }

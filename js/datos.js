@@ -19,6 +19,13 @@ const AVATARES = {
 const LETRAS = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split("");
 const LETRAS_SIN_AVATAR = ["Ñ"];
 
+// Nombre de archivo de cada letra. La Ñ se guarda como ENIE.jpg porque los
+// nombres con Ñ dan problemas entre Mac, Windows y el servidor.
+const ARCHIVO_LETRA = { "Ñ": "ENIE" };
+function archivoLetra(letra) {
+  return ARCHIVO_LETRA[letra] || letra;
+}
+
 // Expresiones en video (los archivos están en video/<categoria>/)
 const EXPRESIONES = {
   saludos: {

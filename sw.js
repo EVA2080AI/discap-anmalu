@@ -1,6 +1,6 @@
 /* Service worker sencillo: guarda la app en caché para que abra sin internet.
    Las fotos y videos se guardan a medida que se van viendo. */
-const CACHE = "anmalu-v1";
+const CACHE = "anmalu-v2";
 const BASE = ["./", "index.html", "css/style.css", "js/datos.js", "js/app.js", "manifest.json"];
 
 self.addEventListener("install", e => {

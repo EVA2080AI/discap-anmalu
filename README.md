@@ -42,7 +42,7 @@ index.html        ← las tres pantallas
 css/style.css     ← colores, botones, tarjetas
 js/datos.js       ← AQUÍ se agregan letras, avatares y videos (es solo una lista)
 js/app.js         ← la lógica: navegación, traductor, expresiones
-img/senas/        ← seña formal de cada letra (A.jpg … Z.jpg, Ñ.jpg)
+img/senas/        ← seña formal de cada letra (A.jpg … Z.jpg; la Ñ es ENIE.jpg)
 img/avatares/     ← fotos de cada niña por letra (ana/, antonella/, mariapaula/)
 video/            ← videos de expresiones (saludos/, familia/, colores/)
 manifest.json     ← para que se instale como app
