@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Baloo_2, Nunito } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
 import { Navegacion } from "@/components/navegacion";
 import { RegistrarSW } from "@/components/registrar-sw";
 import "./globals.css";
@@ -47,7 +46,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <a href="/admin" className="font-bold text-navy hover:underline">Subir fotos y videos</a>
         </footer>
         <RegistrarSW />
-        <Analytics />
       </body>
     </html>
   );
