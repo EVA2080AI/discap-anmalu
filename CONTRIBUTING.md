@@ -12,9 +12,13 @@ Ve a la pestaña **Issues**: https://github.com/EVA2080AI/discap-anmalu/issues
 
 ## 2. Haz el cambio
 
-### Opción fácil: editar desde GitHub (sin instalar nada)
+### Opción fácil: subir contenido sin tocar código
 
-1. Abre el archivo que quieres cambiar (por ejemplo `js/datos.js`).
+Fotos de letras y videos se suben desde la app: https://discap-anmalu.vercel.app/admin (pide la clave a tu profe). No hace falta GitHub.
+
+### Editar desde GitHub (sin instalar nada)
+
+1. Abre el archivo que quieres cambiar (por ejemplo `src/lib/datos.ts`).
 2. Toca el lápiz ✏️ (**Edit this file**).
 3. Haz el cambio.
 4. Abajo, en **Commit changes**, escribe qué cambiaste (ej. "Agrega la expresión Gracias") y elige **"Create a new branch and start a pull request"**.
@@ -25,8 +29,9 @@ Ve a la pestaña **Issues**: https://github.com/EVA2080AI/discap-anmalu/issues
 ```bash
 git clone https://github.com/EVA2080AI/discap-anmalu.git
 cd discap-anmalu
+npm install
 git checkout -b mi-mejora
-# ... edita los archivos, prueba abriendo index.html ...
+# ... edita los archivos, prueba con `npm run dev` (ver README) ...
 git add .
 git commit -m "Describe tu cambio"
 git push origin mi-mejora

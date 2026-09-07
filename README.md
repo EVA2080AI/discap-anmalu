@@ -1,8 +1,8 @@
 # 🤟 DISCAP ANMALU · Traductor de Lengua de Señas Colombiana
 
-App web (funciona como app en el celular) que traduce palabras a **Lengua de Señas Colombiana (LSC)** letra por letra, con las fotos de **Ana Lucía, Antonella y María Paula** y la seña formal al lado. También tiene **Expresiones** en video: saludos, familia y colores.
+App web (se instala como app en el celular) que traduce palabras a **Lengua de Señas Colombiana (LSC)** letra por letra, con las fotos de **Ana Lucía, Antonella y María Paula** y la seña formal al lado. Tiene **Expresiones** en video (saludos, familia, colores…), un **Buzón de ideas** para el público y una **Zona de subidas** para que las alumnas agreguen fotos y videos desde el celular.
 
-Proyecto escolar para la **Feria Inspírate 2026**. Es la evolución de la app Android del año pasado.
+Proyecto escolar para la **Feria Inspírate 2026**.
 
 **🌐 App en línea:** https://discap-anmalu.vercel.app
 
@@ -12,102 +12,90 @@ Proyecto escolar para la **Feria Inspírate 2026**. Es la evolución de la app A
 
 | Pantalla | Qué hace |
 |---|---|
-| **Inicio** | Dos botones grandes: Traductor y Expresiones. |
-| **Traductor** | Eliges avatar (Ana Lucía, Antonella, María Paula o Aleatorio), escribes una palabra y la app la muestra letra por letra: foto de la niña haciendo la seña + recuadro con la seña formal. Tiene play/pausa, anterior/siguiente y velocidad. Abajo está el abecedario completo para tocar cualquier letra. |
-| **Expresiones** | Tres categorías (Saludos, Familia, Colores). Tocas una palabra y se reproduce el video. |
+| **Inicio** | Menú: Traductor, Expresiones y Buzón de ideas. |
+| **Traductor** | Eliges avatar (Ana Lucía, Antonella, María Paula o Aleatorio), escribes una palabra y la app la muestra letra por letra: foto de la niña + recuadro con la seña formal (se amplía al tocarlo). Play/pausa sobre la foto, anterior/siguiente, velocidad. Abecedario completo. Funciona sin internet. |
+| **Expresiones** | Categorías con videos. Buscador. Se reproducen solos al tocar. |
+| **Buzón de ideas** | Cualquiera (niños incluidos) deja una idea, un error o un "me gustó". Lista pública con estado 🌱 🛠️ ✅ y respuesta del equipo. |
+| **Zona de subidas** (`/admin`) | Con clave. Alumna: sube foto de letra o video y queda **pendiente**. Admin: publica directo, aprueba o rechaza lo pendiente, responde ideas. |
 
 ## Instalar como app en el celular
 
 1. Abre https://discap-anmalu.vercel.app en Chrome (Android) o Safari (iPhone).
-2. Android: menú ⋮ → **"Agregar a pantalla de inicio"** / **"Instalar app"**.
-3. iPhone: botón compartir → **"Agregar a inicio"**.
+2. Android: menú ⋮ → **Instalar app**. iPhone: compartir → **Agregar a inicio**.
 
-Queda con ícono propio y abre a pantalla completa. Las fotos que ya viste funcionan sin internet.
+## Cómo está hecha
 
-## Cómo está hecha (para quien quiera mejorarla)
+Misma base que Faro Emergency: **Next.js 16 + React 19 + TypeScript + Tailwind 4**, **Prisma** con **PostgreSQL en Neon** (integración de Vercel), archivos subidos en **Vercel Blob**, sesión con JWT en cookie (`jose`), validación con `zod`, íconos `lucide-react`.
 
-Sin frameworks ni instalación: solo **HTML + CSS + JavaScript**. Se puede abrir `index.html` directo en el navegador o con un servidor local:
+```
+src/app/                 ← rutas (App Router)
+  page.tsx               ← inicio
+  traductor/             ← traductor (lee fotos nuevas de la BD)
+  expresiones/           ← categorías y videos (BD)
+  ideas/                 ← buzón de ideas
+  admin/                 ← zona de subidas: subir, subir/video, aprobar, ideas
+  api/                   ← sesion, subir-token, publicar, revisar, ideas
+src/components/          ← componentes React (cliente)
+src/lib/                 ← prisma.ts, auth.ts, datos.ts (letras, avatares, normalizar)
+prisma/schema.prisma     ← Categoria, Expresion, FotoLetra, Idea
+prisma/seed.mjs          ← carga los 24 videos originales
+public/img/senas         ← seña formal de cada letra (la Ñ es ENIE.jpg)
+public/img/avatares      ← fotos originales por letra (ana/, antonella/, mariapaula/)
+public/video             ← videos originales (540p) con póster .jpg
+public/sw.js             ← service worker: fotos en caché para usar sin internet
+tests/smoke.spec.ts      ← prueba de humo con Playwright
+```
+
+### Desarrollo local
 
 ```bash
-# opción 1 (Python viene en Mac/Linux)
-python3 -m http.server 8080
-# opción 2 (si tienes Node)
-npx serve .
+npm install
+vercel env pull .env.local      # trae DATABASE_URL, BLOB_READ_WRITE_TOKEN, claves…
+npx prisma db push              # crea/actualiza las tablas
+npm run db:seed                 # carga los videos originales (idempotente)
+npm run dev                     # http://localhost:3000
 ```
 
-y entrar a http://localhost:8080
+Pruebas de humo contra producción (o `BASE_URL=http://localhost:3000`):
 
+```bash
+npx playwright install chromium
+npm run test:e2e
 ```
-index.html        ← las pantallas: inicio, traductor, expresiones, buzón de ideas
-css/style.css     ← colores, botones, tarjetas
-js/datos.js       ← letras y avatares
-datos/expresiones.json ← los videos por categoría (lo edita la zona de subidas)
-api/              ← funciones del servidor: sesión, subidas, buzón de ideas
-admin/            ← zona de subidas (fotos, videos, ideas, aprobaciones)
-js/app.js         ← la lógica: navegación, traductor, expresiones
-img/senas/        ← seña formal de cada letra (A.jpg … Z.jpg; la Ñ es ENIE.jpg)
-img/avatares/     ← fotos de cada niña por letra (ana/, antonella/, mariapaula/)
-video/            ← videos de expresiones (saludos/, familia/, colores/)
-manifest.json     ← para que se instale como app
-sw.js             ← para que funcione sin internet
-docs/             ← el brief del proyecto y material de referencia
-```
-
-### Agregar una expresión nueva (ejemplo: "Gracias")
-
-La forma fácil: entra a `/admin/`, pestaña **Video**, y súbelo desde el celular.
-
-A mano: guarda el video como `video/saludos/gracias.mp4` y agrega en `datos/expresiones.json`, dentro de `saludos.items`:
-```json
-{ "nombre": "Gracias", "archivo": "gracias.mp4" }
-```
-
-### Agregar una categoría nueva (ejemplo: "Animales")
-
-Desde `/admin/` como admin: pestaña **Video** → **＋ Nueva** → nombre y emoji. A mano: un bloque nuevo en `datos/expresiones.json`; los botones de categoría se generan solos.
-
-### Cambiar los colores
-
-Están todos al principio de `css/style.css` en `:root` (`--azul`, `--lima`, `--amarillo`…).
-
-## Subir fotos y videos (zona de subidas)
-
-👉 https://discap-anmalu.vercel.app/admin/
-
-Se entra con una clave. Hay dos:
-
-| Clave | Quién | Qué pasa al subir |
-|---|---|---|
-| **Alumna** | Ana Lucía, Antonella, María Paula y compañeras | Queda **pendiente de aprobación**; un admin la revisa en la pestaña *Por aprobar*. |
-| **Admin** | Guido, profes | Se **publica directo**; en un minuto se ve en la app. |
-
-- **Foto de letra**: eliges la niña, la letra y tomas la foto con el celular. La app la reduce sola a 800 px.
-- **Video**: eliges la categoría (o creas una nueva si eres admin), escribes qué dice la seña y grabas o eliges el video. Máximo 3 segundos.
-- La clave nunca se guarda en el celular: se cambia por un pase que caduca a las 12 horas.
-
-Por dentro, cada subida es un *commit* (admin) o un *pull request* (alumna) en este repositorio, así que todo queda con historial y Vercel publica solo.
-
-## Buzón de ideas
-
-En la app hay un **💌 Buzón de ideas** para que cualquier persona (niños incluidos) cuente qué le gustó, qué falla o qué le gustaría. No necesita cuenta. Cada idea aparece en la lista pública con su estado (🌱 Nueva · 🛠️ En proceso · ✅ ¡Lista!) y la respuesta del equipo.
-
-Los admins responden y cambian el estado desde la pestaña *Ideas* de la zona de subidas. Cada idea se copia también como issue en este repositorio para el equipo técnico.
-
-## Para desarrolladores
-
-Los issues de GitHub (https://github.com/EVA2080AI/discap-anmalu/issues) son el tablero técnico: mejoras, errores y tareas con estimación. Si quieres hacer un cambio de código, lee [CONTRIBUTING.md](CONTRIBUTING.md). Las tareas con la etiqueta **`buena para empezar`** son ideales para el primer aporte.
 
 ### Variables de entorno (Vercel)
 
 | Variable | Para qué |
 |---|---|
+| `DATABASE_URL`, `DATABASE_URL_UNPOOLED` | Postgres en Neon (las pone la integración) |
+| `BLOB_READ_WRITE_TOKEN` | Almacén de fotos y videos subidos (Vercel Blob, público) |
+| `AUTH_SECRET` | Firma de la cookie de sesión |
 | `ADMIN_CLAVE`, `ALUMNA_CLAVE` | Claves de la zona de subidas |
-| `GITHUB_TOKEN`, `GITHUB_REPO` | Para que las subidas se guarden en este repositorio |
-| `BLOB_READ_WRITE_TOKEN` | Almacén temporal de subidas y del buzón de ideas (Vercel Blob) |
+
+### Datos
+
+- **Categoria** → **Expresion** (video): `estado` = pendiente · publicada · rechazada · reemplazada.
+- **FotoLetra**: fotos subidas que agregan (Ñ) o reemplazan una original. Misma máquina de estados.
+- **Idea**: buzón. `tipo` = idea · error · gusto; `estado` = nueva · en-proceso · lista.
+
+Las fotos y videos originales no están en la base de datos: viven en `public/` y se sirven como estáticos.
+
+## Subir fotos y videos
+
+👉 https://discap-anmalu.vercel.app/admin
+
+| Clave | Quién | Qué pasa al subir |
+|---|---|---|
+| **Alumna** | Ana Lucía, Antonella, María Paula y compañeras | Queda **pendiente**; un admin la revisa en *Por aprobar*. |
+| **Admin** | Guido, profes | Se **publica al instante**. También crea categorías nuevas. |
+
+La foto se reduce sola a 800 px antes de subir. Los videos: verticales, 1 a 3 segundos, máximo 25 MB. La clave nunca se guarda en el celular: se cambia por un pase que caduca a las 12 horas.
 
 ## Créditos
 
 - Señas y fotos: Ana Lucía, Antonella y María Paula.
 - Idea y coordinación: Guido Gamba.
 - Señas formales: material "Inclusión al día".
-- Desarrollo inicial: Juan Sebastián Másmela.
+- Desarrollo: Juan Sebastián Másmela.
+
+Licencia: ver [LICENSE.md](LICENSE.md). Las fotos y videos de las niñas son de uso exclusivo de esta app.

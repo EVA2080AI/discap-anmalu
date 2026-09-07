@@ -1,0 +1,7 @@
+# La app se puede indexar; las fotos y videos de las niñas, no.
+User-agent: *
+Allow: /
+Disallow: /img/avatares/
+Disallow: /video/
+Disallow: /admin
+Disallow: /api/

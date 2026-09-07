@@ -1,0 +1,75 @@
+// Esquema de datos — DISCAP ANMALU
+// PostgreSQL (Neon) en producción vía integración con Vercel, igual que Faro Emergency.
+// Convenciones heredadas de Faro: ids cuid(), "enums" como String documentado
+// (agregar un valor no requiere migración), autorización en el servidor.
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+/// Categoría de expresiones (Saludos, Familia, Colores, …)
+model Categoria {
+  id          String      @id @default(cuid())
+  slug        String      @unique
+  titulo      String
+  emoji       String      @default("🎬")
+  orden       Int         @default(0)
+  creadoEn    DateTime    @default(now())
+  expresiones Expresion[]
+}
+
+/// Un video de una seña. estado: pendiente | publicada | rechazada | reemplazada
+model Expresion {
+  id          String    @id @default(cuid())
+  categoriaId String
+  categoria   Categoria @relation(fields: [categoriaId], references: [id], onDelete: Cascade)
+  nombre      String
+  slug        String
+  url         String
+  poster      String?
+  color       String?
+  estado      String    @default("publicada")
+  autor       String?
+  orden       Int       @default(0)
+  creadoEn    DateTime  @default(now())
+
+  @@index([categoriaId, estado])
+  @@index([estado])
+}
+
+/// Foto de una niña haciendo una letra, subida desde la zona de subidas.
+/// Las fotos originales viven en /public/img/avatares; aquí solo van las nuevas
+/// o las que reemplazan a una. estado: pendiente | publicada | rechazada | reemplazada
+model FotoLetra {
+  id       String   @id @default(cuid())
+  avatar   String   // ana | antonella | mariapaula
+  letra    String   // A … Z, Ñ
+  url      String
+  estado   String   @default("publicada")
+  autor    String?
+  creadoEn DateTime @default(now())
+
+  @@index([avatar, letra, estado])
+  @@index([estado])
+}
+
+/// Buzón de ideas. tipo: idea | error | gusto · estado: nueva | en-proceso | lista
+model Idea {
+  id            String   @id @default(cuid())
+  tipo          String
+  nombre        String
+  mensaje       String
+  estado        String   @default("nueva")
+  respuesta     String?
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  @@index([estado])
+}
