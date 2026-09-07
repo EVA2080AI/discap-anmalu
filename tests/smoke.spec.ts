@@ -12,13 +12,20 @@ test("la portada carga y lleva al traductor", async ({ page }) => {
   await expect(page).toHaveURL(/traductor/);
 });
 
-test("«hola» se deletrea con foto y seña formal", async ({ page }) => {
+test("«luz» se deletrea con foto y seña formal", async ({ page }) => {
+  await page.goto(BASE + "/traductor");
+  await page.getByLabel("Texto a traducir").fill("luz");
+  await page.getByRole("button", { name: "Traducir" }).click();
+  await expect(page.getByAltText(/haciendo la letra L/)).toBeVisible();
+  await expect(page.getByAltText("Seña formal de la letra L")).toBeVisible();
+});
+
+test("«hola» tiene seña propia y muestra su video", async ({ page }) => {
   await page.goto(BASE + "/traductor");
   await page.getByLabel("Texto a traducir").fill("hola");
   await page.getByRole("button", { name: "Traducir" }).click();
-  const foto = page.getByAltText(/haciendo la letra H/);
-  await expect(foto).toBeVisible();
-  await expect(page.getByAltText("Seña formal de la letra H")).toBeVisible();
+  await expect(page.getByText("Seña propia: Hola")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Letra por letra" })).toBeVisible();
 });
 
 test("un video de expresiones reproduce", async ({ page }) => {
