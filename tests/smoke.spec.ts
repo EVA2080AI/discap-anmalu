@@ -60,6 +60,14 @@ test("privacidad y docentes existen", async ({ page }) => {
   await expect(page.getByRole("link", { name: /Tarjetas del abecedario/ })).toBeVisible();
 });
 
+test("la landing del proyecto cuenta la historia", async ({ page }) => {
+  await page.goto(BASE + "/proyecto");
+  await expect(page.getByRole("heading", { name: /DISCAP/ })).toBeVisible();
+  await expect(page.getByText("96 puntos.")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Creadoras de una gran idea" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Probar la app" })).toBeVisible();
+});
+
 test("el buzón de ideas se ve", async ({ page }) => {
   await page.goto(BASE + "/ideas");
   await expect(page.getByRole("heading", { name: "Buzón de ideas" })).toBeVisible();

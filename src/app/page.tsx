@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Hand, Clapperboard, BookOpenCheck, Mailbox, ArrowRight, Info, Presentation, GraduationCap } from "lucide-react";
+import { Hand, Clapperboard, BookOpenCheck, Mailbox, ArrowRight, Info, Presentation, GraduationCap, Sparkles } from "lucide-react";
 import { TuProgreso } from "@/components/tu-progreso";
 
 export default function Inicio() {
@@ -19,9 +19,14 @@ export default function Inicio() {
         <p className="mx-auto mt-3 max-w-md text-mist md:text-lg">
           Escribe una palabra y mírala en <strong className="text-ink">Lengua de Señas Colombiana</strong>, con Ana Lucía, Antonella y María Paula.
         </p>
-        <Link href="/sobre" className="mt-3 inline-flex min-h-11 items-center gap-1.5 rounded-full bg-white px-4 text-sm font-extrabold text-navy shadow-soft">
-          <Info className="size-4" aria-hidden="true" /> ¿Qué es y cómo se usa?
-        </Link>
+        <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
+          <Link href="/proyecto" className="inline-flex min-h-11 items-center gap-1.5 rounded-full bg-sun px-4 text-sm font-extrabold text-navy-deep shadow-soft">
+            <Sparkles className="size-4" aria-hidden="true" /> Conoce el proyecto
+          </Link>
+          <Link href="/sobre" className="inline-flex min-h-11 items-center gap-1.5 rounded-full bg-white px-4 text-sm font-extrabold text-navy shadow-soft">
+            <Info className="size-4" aria-hidden="true" /> ¿Cómo se usa?
+          </Link>
+        </div>
       </section>
 
       {/* Menú principal */}

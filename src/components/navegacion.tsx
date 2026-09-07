@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Hand, Clapperboard, BookOpenCheck, Mailbox } from "lucide-react";
+import { Home, Hand, Clapperboard, BookOpenCheck, Mailbox, Sparkles } from "lucide-react";
 import { VigilanteFeria } from "@/components/feria";
 import { Ajustes } from "@/components/ajustes";
 import { cn } from "@/lib/utils";
@@ -49,6 +49,16 @@ export function Navegacion() {
                 {texto}
               </Link>
             ))}
+            <Link
+              href="/proyecto"
+              className={cn(
+                "flex items-center gap-2 rounded-full px-3.5 py-2 font-bold transition-colors",
+                ruta.startsWith("/proyecto") ? "bg-white/15 text-sun" : "text-white/85 hover:bg-white/10",
+              )}
+            >
+              <Sparkles className="size-4" aria-hidden="true" />
+              El proyecto
+            </Link>
           </nav>
           <Link href="/sobre" className="ml-auto rounded-full bg-sun px-3 py-1 text-xs font-extrabold tracking-widest text-navy-deep md:ml-2" aria-label="Qué es y cómo se usa">
             {esAdmin ? "SUBIDAS" : "¿QUÉ ES?"}
