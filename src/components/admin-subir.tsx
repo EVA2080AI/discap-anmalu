@@ -238,6 +238,11 @@ export function SubirVideo({ categorias, esAdmin }: { categorias: Cat[]; esAdmin
           <span className="font-extrabold text-navy">Toca para grabar o elegir el video</span>
           <span className="text-sm text-mist">Vertical, 1 a 3 segundos, con luz de frente</span>
         </label>
+        <ul className="mt-2 grid gap-1 rounded-xl bg-sun-soft p-3 text-xs text-navy-deep">
+          <li>• Que se vean <b>la cara y las dos manos</b>: en LSC la expresión de la cara es parte de la seña.</li>
+          <li>• Fondo claro y liso, sin contraluz. Cámara a la altura del pecho.</li>
+          <li>• Haz la seña una sola vez, despacio y completa. Máximo 3 segundos.</li>
+        </ul>
         {previa && (
           <div className="mt-3 text-center">
             <video src={previa} playsInline muted controls className="mx-auto w-full max-w-60 rounded-2xl bg-black shadow-soft" />

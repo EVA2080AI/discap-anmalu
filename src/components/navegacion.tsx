@@ -2,15 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Hand, Clapperboard, Gamepad2, Mailbox } from "lucide-react";
+import { Home, Hand, Clapperboard, BookOpenCheck, Mailbox } from "lucide-react";
 import { VigilanteFeria } from "@/components/feria";
+import { Ajustes } from "@/components/ajustes";
 import { cn } from "@/lib/utils";
 
 const RUTAS = [
   { href: "/", texto: "Inicio", Icono: Home },
   { href: "/traductor", texto: "Traductor", Icono: Hand },
   { href: "/expresiones", texto: "Expresiones", Icono: Clapperboard },
-  { href: "/practicar", texto: "Practicar", Icono: Gamepad2 },
+  { href: "/lecciones", texto: "Aprender", Icono: BookOpenCheck },
   { href: "/ideas", texto: "Ideas", Icono: Mailbox },
 ];
 
@@ -19,7 +20,7 @@ export function Navegacion() {
   const ruta = usePathname();
   const esAdmin = ruta.startsWith("/admin");
   const esFeria = ruta === "/feria";
-  const activa = (href: string) => (href === "/" ? ruta === "/" : ruta.startsWith(href));
+  const activa = (href: string) => (href === "/" ? ruta === "/" : href === "/lecciones" ? ruta.startsWith("/lecciones") || ruta.startsWith("/practicar") : ruta.startsWith(href));
 
   if (esFeria) return null;
 
@@ -52,6 +53,7 @@ export function Navegacion() {
           <Link href="/sobre" className="ml-auto rounded-full bg-sun px-3 py-1 text-xs font-extrabold tracking-widest text-navy-deep md:ml-2" aria-label="Qué es y cómo se usa">
             {esAdmin ? "SUBIDAS" : "¿QUÉ ES?"}
           </Link>
+          <Ajustes />
         </div>
       </header>
 

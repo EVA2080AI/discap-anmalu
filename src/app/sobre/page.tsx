@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { Hand, Clapperboard, Gamepad2, Mailbox, Smartphone, Sparkles } from "lucide-react";
+import { Hand, Clapperboard, Gamepad2, Mailbox, Smartphone, Sparkles, BadgeCheck, BookMarked } from "lucide-react";
+import { FUENTES, REVISION, VERSION } from "@/lib/contenido";
 
 export const metadata: Metadata = { title: "Qué es y cómo se usa" };
 
@@ -82,9 +83,33 @@ export default function Sobre() {
         <h2 className="mb-2 flex items-center gap-2 text-xl font-extrabold text-navy"><Sparkles className="size-6" aria-hidden="true" /> Cosas para saber</h2>
         <ul className="grid gap-2 text-[15px]">
           <li className="tarjeta p-3">Si una palabra tiene <b>seña propia</b> (como «hola» o «mamá»), el traductor muestra su video; si no, la <b>deletrea</b> letra por letra. Las señas propias salen de <Link href="/expresiones" className="font-bold text-navy underline">Expresiones</Link>: cada video nuevo hace crecer el traductor.</li>
+          <li className="tarjeta p-3"><b>La cara también habla.</b> En LSC la expresión facial es parte de la gramática: la misma seña con las cejas levantadas es una pregunta. Por eso los videos muestran la cara y las manos. Imita las dos cosas.</li>
+          <li className="tarjeta p-3"><b>La LSC tiene su propia gramática.</b> No sigue el orden del español ni usa artículos: el verbo suele ir al final y el tema primero. Cuando escribes varias palabras, la app las muestra una por una; eso sirve para aprender vocabulario, no es una frase en LSC. Para hablar de verdad hay que aprender con personas sordas.</li>
           <li className="tarjeta p-3">Las fotos muestran a las niñas de frente, así que su mano derecha queda a tu izquierda. Usa <b>Espejo</b> en el traductor para copiar la seña más fácil.</li>
-          <li className="tarjeta p-3">Las señas formales vienen del material «Inclusión al día». Las fotos y videos son de uso exclusivo de esta app.</li>
+          <li className="tarjeta p-3">Las fotos y videos son de uso exclusivo de esta app, con autorización de las familias. Lee la <Link href="/privacidad" className="font-bold text-navy underline">política de privacidad</Link>.</li>
         </ul>
+      </section>
+
+      <section className="tarjeta mt-8 p-5">
+        <h2 className="mb-2 flex items-center gap-2 text-xl font-extrabold text-navy"><BadgeCheck className="size-6" aria-hidden="true" /> Revisión de las señas</h2>
+        {REVISION.nombre ? (
+          <p className="text-[15px]">Las señas de esta app fueron revisadas por <b>{REVISION.nombre}</b>{REVISION.entidad && <> ({REVISION.entidad})</>}{REVISION.fecha && <> en {REVISION.fecha}</>}.</p>
+        ) : (
+          <p className="text-[15px]">Las señas las aprendieron y grabaron las niñas a partir de material de LSC. <b>Todavía no han sido revisadas por una persona sorda o un intérprete certificado.</b> Estamos buscando esa revisión: si eres intérprete o parte de la comunidad sorda y quieres ayudar, escríbenos en el <Link href="/ideas" className="font-bold text-navy underline">buzón</Link>.</p>
+        )}
+      </section>
+
+      <section className="mt-8">
+        <h2 className="mb-2 flex items-center gap-2 text-xl font-extrabold text-navy"><BookMarked className="size-6" aria-hidden="true" /> Fuentes</h2>
+        <ul className="grid gap-2 text-[15px]">
+          {FUENTES.map(f => (
+            <li key={f.nombre} className="tarjeta p-3">
+              {f.url ? <a href={f.url} target="_blank" rel="noopener" className="font-bold text-navy underline">{f.nombre}</a> : <b className="text-navy">{f.nombre}</b>}
+              <span className="block text-sm text-mist">{f.que}</span>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-2 text-xs text-mist">Versión {VERSION} · <Link href="/novedades" className="underline">qué hay de nuevo</Link></p>
       </section>
 
       <div className="mt-8 grid gap-3 sm:grid-cols-2">

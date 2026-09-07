@@ -56,6 +56,19 @@ h1, h2, h3, .display {
 
 [hidden] { display: none !important; }
 
+/* Ajustes de accesibilidad (atributos en <html>, ver src/lib/preferencias.ts) */
+html[data-texto-grande] { font-size: 115%; }
+html[data-contraste] { --color-mist: #3f4658; --color-line: #9aa1b5; --color-cream: #ffffff; --color-navy: #0f2a6b; --color-lime: #4f8a12; }
+html[data-contraste] body { background-image: none; }
+html[data-contraste] .tarjeta, html[data-contraste] .ficha { border: 2px solid #3f4658; }
+html[data-sin-animaciones] *, html[data-sin-animaciones] *::before, html[data-sin-animaciones] *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+
+@media print {
+  header, nav, footer, .print\:hidden { display: none !important; }
+  body { background: #fff !important; }
+  main { padding: 0 !important; max-width: none !important; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }

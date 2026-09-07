@@ -16,7 +16,17 @@ Proyecto escolar para la **Feria Inspírate 2026**.
 | **Traductor** | Eliges avatar (Ana Lucía, Antonella, María Paula o Aleatorio), escribes una palabra y la app la muestra letra por letra: foto de la niña + recuadro con la seña formal (se amplía al tocarlo). Play/pausa sobre la foto, anterior/siguiente, velocidad. Abecedario completo. Funciona sin internet. |
 | **Expresiones** | Categorías con videos. Buscador. Se reproducen solos al tocar. |
 | **Buzón de ideas** | Cualquiera (niños incluidos) deja una idea, un error o un "me gustó". Lista pública con estado 🌱 🛠️ ✅ y respuesta del equipo. |
+| **Aprender** (`/lecciones`) | Una lección por categoría: ver, practicar (¿qué seña es?) y listo. Progreso en el dispositivo. |
+| **Practicar** | Adivina la letra entre cuatro. Las letras falladas vuelven a salir hasta dominarlas. |
+| **Modo feria** (`/feria`) | Demo automática, QR grande, pantalla completa, vuelve sola tras 60 s. |
+| **Docentes** (`/docente`) | Proyectar, retos, lecciones, tarjetas del abecedario para imprimir, plan de clase. |
+| **Qué es** (`/sobre`) | Qué es la app, cómo se usa, expresión facial y gramática de la LSC, revisión de las señas, fuentes. |
+| **Privacidad** (`/privacidad`) | Política en palabras sencillas y formato de autorización de imagen (`/consentimiento`). |
 | **Zona de subidas** (`/admin`) | Con clave. Alumna: sube foto de letra o video y queda **pendiente**. Admin: publica directo, aprueba o rechaza lo pendiente, responde ideas. |
+
+Ajustes (engranaje en la cabecera): alto contraste, texto grande, sin animaciones, sonidos. Se guardan en el dispositivo.
+
+Textos que el equipo edita a mano en `src/lib/contenido.ts`: versión y novedades, quién revisó las señas, fuentes y frases pendientes de grabar.
 
 ## Instalar como app en el celular
 

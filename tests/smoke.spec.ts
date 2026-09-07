@@ -46,6 +46,20 @@ test("la página «qué es» explica cómo usar la app", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "¿Cómo se usa?" })).toBeVisible();
 });
 
+test("las lecciones se listan y se puede abrir una", async ({ page }) => {
+  await page.goto(BASE + "/lecciones");
+  await page.getByRole("button", { name: /Lección 1/ }).click();
+  await expect(page.getByRole("tab", { name: /Ver/ })).toBeVisible();
+  await expect(page.locator("video")).toBeVisible();
+});
+
+test("privacidad y docentes existen", async ({ page }) => {
+  await page.goto(BASE + "/privacidad");
+  await expect(page.getByRole("heading", { name: "Privacidad" })).toBeVisible();
+  await page.goto(BASE + "/docente");
+  await expect(page.getByRole("link", { name: /Tarjetas del abecedario/ })).toBeVisible();
+});
+
 test("el buzón de ideas se ve", async ({ page }) => {
   await page.goto(BASE + "/ideas");
   await expect(page.getByRole("heading", { name: "Buzón de ideas" })).toBeVisible();

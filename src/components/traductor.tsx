@@ -7,6 +7,7 @@ import { AVATARES, AVATAR_IDS, LETRAS, fotoOriginal, normalizar, senaFormal, typ
 import { prefs } from "@/lib/preferencias";
 import { sonidoExito, sonidoToque } from "@/lib/sonido";
 import { TiraLetras, type PasoTira, type Video } from "@/components/tira-letras";
+import { BotonTarjeta } from "@/components/tarjeta-nombre";
 import { cn } from "@/lib/utils";
 
 type Elegido = AvatarId | "aleatorio";
@@ -301,9 +302,13 @@ export function Traductor({ fotosExtra, senas = {} }: { fotosExtra: Record<strin
             <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
               <button type="button" onClick={compartir} className="flex min-h-11 items-center gap-1.5 rounded-full bg-white px-4 text-sm font-extrabold text-navy shadow-soft"><Share2 className="size-4" aria-hidden="true" /> Compartir</button>
               <button type="button" onClick={escuchar} className="flex min-h-11 items-center gap-1.5 rounded-full bg-white px-4 text-sm font-extrabold text-navy shadow-soft"><Ear className="size-4" aria-hidden="true" /> Escuchar</button>
+              <BotonTarjeta pasos={secuencia} texto={texto} fotoDe={fotoDe} />
               {compartido && <span className="text-sm font-bold text-[#2e6b12]">{compartido}</span>}
             </div>
             <p className="mt-2 text-center text-xs text-mist">Desliza la foto con el dedo para pasar de letra.</p>
+            {secuencia.some(p => p.letra === " ") && (
+              <p className="mt-2 rounded-xl bg-sun-soft px-3 py-2 text-center text-xs text-navy-deep">Esto es vocabulario palabra por palabra. La LSC tiene su propia gramática (el verbo suele ir al final y no hay artículos). <a href="/sobre" className="font-bold underline">Saber más</a></p>
+            )}
           </section>
         ) : (
           <div className="tarjeta hidden aspect-[3/4] flex-col items-center justify-center gap-2 p-8 text-center text-mist md:flex">

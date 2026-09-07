@@ -26,6 +26,7 @@ export function Expresiones({ categorias }: { categorias: Categoria[] }) {
   const lista = useMemo(() => {
     if (buscando) { const q = busqueda.trim().toLowerCase(); return todas.filter(i => i.nombre.toLowerCase().includes(q)); }
     if (activa === "__favoritos__") return todas.filter(i => favoritos.includes(i.id));
+    if (activa === "__todas__") return [...todas].sort((a, b) => a.nombre.localeCompare(b.nombre, "es"));
     const c = categorias.find(x => x.slug === activa);
     return c ? c.items.map(i => ({ ...i, categoria: c.titulo, emoji: c.emoji })) : [];
   }, [categorias, todas, activa, busqueda, buscando, favoritos]);
@@ -65,6 +66,10 @@ export function Expresiones({ categorias }: { categorias: Categoria[] }) {
               {c.titulo}
             </button>
           ))}
+          <button type="button" role="tab" aria-selected={activa === "__todas__"} onClick={() => setActiva("__todas__")} className={cn("ficha shrink-0 flex-row px-4 text-base", activa === "__todas__" && "activo")}>
+            <span className="font-display text-xl" aria-hidden="true">A–Z</span>
+            Todas ({todas.length})
+          </button>
           <button type="button" role="tab" aria-selected={activa === "__favoritos__"} onClick={() => setActiva("__favoritos__")} className={cn("ficha sol shrink-0 flex-row px-4 text-base", activa === "__favoritos__" && "activo")}>
             <Star className="size-6 fill-sun text-sun" aria-hidden="true" />
             Favoritos{favoritos.length ? ` (${favoritos.length})` : ""}
@@ -86,6 +91,7 @@ export function Expresiones({ categorias }: { categorias: Categoria[] }) {
                 </button>
               </div>
             </div>
+            <p className="mt-2 text-center text-xs text-mist">Mira la cara, no solo las manos: en LSC la expresión es parte de la seña.</p>
             <div className="mt-2 flex flex-wrap justify-center gap-2">
               <button type="button" onClick={() => setBucle(b => !b)} aria-pressed={bucle} className={cn("flex min-h-11 items-center gap-1.5 rounded-full bg-white px-4 text-sm font-extrabold text-navy shadow-soft", bucle && "bg-sun text-navy-deep")}><Repeat className="size-4" aria-hidden="true" /> Repetir</button>
               <button type="button" onClick={() => setLento(l => !l)} aria-pressed={lento} className={cn("flex min-h-11 items-center gap-1.5 rounded-full bg-white px-4 text-sm font-extrabold text-navy shadow-soft", lento && "bg-sun text-navy-deep")}><Turtle className="size-4" aria-hidden="true" /> Cámara lenta</button>
@@ -114,7 +120,7 @@ export function Expresiones({ categorias }: { categorias: Categoria[] }) {
                 )}
                 <span>
                   {item.nombre}
-                  {(buscando || activa === "__favoritos__") && <small className="block text-xs font-semibold text-mist">{item.categoria}</small>}
+                  {(buscando || activa === "__favoritos__" || activa === "__todas__") && <small className="block text-xs font-semibold text-mist">{item.categoria}</small>}
                 </span>
               </button>
               <button type="button" onClick={() => alternarFavorito(item.id)} aria-pressed={favoritos.includes(item.id)} aria-label={`Favorito: ${item.nombre}`} className="absolute right-1 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-full text-mist">

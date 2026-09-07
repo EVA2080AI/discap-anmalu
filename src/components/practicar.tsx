@@ -12,7 +12,9 @@ type Reto = { letra: string; avatar: AvatarId; opciones: string[] };
 function azar<T>(lista: readonly T[]) { return lista[Math.floor(Math.random() * lista.length)]; }
 
 function nuevoReto(fotoDe: (a: AvatarId, l: string) => string | null, evitar?: string): Reto {
-  let letra = azar(LETRAS), avatar = azar(AVATAR_IDS), intentos = 0;
+  // Repaso primero: la mitad de las veces sale una letra que se falló antes (si hay).
+  const falladas = Object.keys(prefs.fallos()).filter(l => l !== evitar);
+  let letra = falladas.length && Math.random() < 0.5 ? azar(falladas) : azar(LETRAS), avatar = azar(AVATAR_IDS), intentos = 0;
   while ((letra === evitar || !fotoDe(avatar, letra)) && intentos++ < 30) { letra = azar(LETRAS); avatar = azar(AVATAR_IDS); }
   const otras = LETRAS.filter(l => l !== letra).sort(() => Math.random() - 0.5).slice(0, 3);
   return { letra, avatar, opciones: [...otras, letra].sort(() => Math.random() - 0.5) };
@@ -41,12 +43,12 @@ export function Practicar({ fotosExtra }: { fotosExtra: Record<string, string> }
     setIntentos(n => n + 1);
     if (l === reto.letra) {
       const nueva = racha + 1;
-      setAciertos(n => n + 1); setRacha(nueva);
+      setAciertos(n => n + 1); setRacha(nueva); prefs.registrarAcierto(reto.letra);
       if (nueva > mejor) { setMejor(nueva); prefs.setMejorRacha(nueva); }
       if (nueva % 5 === 0) sonidoExito(); else sonidoAcierto();
       setTimeout(siguiente, 900);
     } else {
-      setRacha(0);
+      setRacha(0); prefs.registrarFallo(reto.letra);
       sonidoError();
     }
   };
@@ -70,7 +72,7 @@ export function Practicar({ fotosExtra }: { fotosExtra: Record<string, string> }
       </div>
       <div>
         <h1 className="mb-1 text-3xl font-extrabold text-navy">Practicar</h1>
-        <p className="mb-4 text-mist">Mira la seña y toca la letra correcta. ¿Cuántas seguidas logras?</p>
+        <p className="mb-4 text-mist">Mira la seña y toca la letra correcta. Las letras que falles vuelven a salir hasta que las domines.</p>
 
         <div className="mb-5 grid grid-cols-3 gap-2 text-center">
           <div className="tarjeta p-3"><b className="block font-display text-2xl text-navy">{aciertos}<span className="text-sm text-mist">/{intentos}</span></b><span className="text-xs font-bold text-mist">aciertos</span></div>

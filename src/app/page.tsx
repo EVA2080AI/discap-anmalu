@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Hand, Clapperboard, Gamepad2, Mailbox, ArrowRight, Info, Presentation } from "lucide-react";
+import { Hand, Clapperboard, BookOpenCheck, Mailbox, ArrowRight, Info, Presentation, GraduationCap } from "lucide-react";
+import { TuProgreso } from "@/components/tu-progreso";
 
 export default function Inicio() {
   return (
@@ -39,11 +40,11 @@ export default function Inicio() {
             <span className="text-sm text-white/90">Saludos, familia y colores en video</span>
           </span>
         </Link>
-        <Link href="/practicar" className="group grid grid-cols-[64px_1fr] items-center gap-4 rounded-card bg-gradient-to-br from-coral to-[#f47b20] p-5 text-white shadow-soft transition-transform active:scale-[.98]">
-          <span className="grid size-16 place-items-center rounded-2xl bg-white/15"><Gamepad2 className="size-9" aria-hidden="true" /></span>
+        <Link href="/lecciones" className="group grid grid-cols-[64px_1fr] items-center gap-4 rounded-card bg-gradient-to-br from-coral to-[#f47b20] p-5 text-white shadow-soft transition-transform active:scale-[.98]">
+          <span className="grid size-16 place-items-center rounded-2xl bg-white/15"><BookOpenCheck className="size-9" aria-hidden="true" /></span>
           <span>
-            <span className="flex items-center gap-2 font-display text-2xl font-extrabold">Practicar <ArrowRight className="size-5 opacity-70 transition-transform group-hover:translate-x-1" aria-hidden="true" /></span>
-            <span className="text-sm text-white/90">Adivina la letra y cuida tu racha</span>
+            <span className="flex items-center gap-2 font-display text-2xl font-extrabold">Aprender <ArrowRight className="size-5 opacity-70 transition-transform group-hover:translate-x-1" aria-hidden="true" /></span>
+            <span className="text-sm text-white/90">Lecciones cortas y práctica con racha</span>
           </span>
         </Link>
         <Link href="/ideas" className="group grid grid-cols-[64px_1fr] items-center gap-4 rounded-card border-[3px] border-transparent bg-white p-5 text-ink shadow-soft transition-colors active:border-sun">
@@ -55,9 +56,12 @@ export default function Inicio() {
         </Link>
       </nav>
 
-      <div className="mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-mist">
+      <TuProgreso />
+
+      <div className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-mist">
         <span>Proyecto escolar · Feria Inspírate 2026</span>
         <Link href="/feria" className="inline-flex min-h-11 items-center gap-1 font-bold text-navy"><Presentation className="size-4" aria-hidden="true" /> Modo feria</Link>
+        <Link href="/docente" className="inline-flex min-h-11 items-center gap-1 font-bold text-navy"><GraduationCap className="size-4" aria-hidden="true" /> Docentes</Link>
       </div>
     </div>
   );
