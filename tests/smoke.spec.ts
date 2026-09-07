@@ -3,7 +3,7 @@ import { test, expect, devices } from "@playwright/test";
 // Prueba de humo contra una URL (por defecto producción):
 //   BASE_URL=http://localhost:3000 npm run test:e2e
 const BASE = process.env.BASE_URL ?? "https://discap-anmalu.vercel.app";
-test.use({ ...devices["iPhone 13"] });
+test.use({ ...devices["iPhone 13"], defaultBrowserType: "chromium" });
 
 test("la portada carga y lleva al traductor", async ({ page }) => {
   await page.goto(BASE);
