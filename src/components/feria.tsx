@@ -40,7 +40,10 @@ export function Feria({ qr, url }: { qr: string; url: string }) {
   return (
     <div className="fixed inset-0 flex flex-col bg-navy text-white" onClick={probar} role="button" tabIndex={0} aria-label="Tocar para probar el traductor">
       <header className="flex items-center justify-between px-6 py-4">
-        <span className="font-display text-3xl font-extrabold tracking-wide">🤟 DISCAP <b className="text-lime">ANMALU</b></span>
+        <span className="flex items-center gap-3 font-display text-3xl font-extrabold tracking-wide">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/icons/logo-mark.svg" alt="" width={44} height={44} className="size-11" /> DISCAP <b className="text-lime">ANMALU</b>
+        </span>
         <button type="button" onClick={e => { e.stopPropagation(); pantallaCompleta(); }} className="grid size-11 place-items-center rounded-full bg-white/15" aria-label="Pantalla completa"><Maximize2 className="size-5" /></button>
       </header>
 

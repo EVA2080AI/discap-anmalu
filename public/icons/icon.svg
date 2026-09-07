@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="110" fill="#1c3f8f"/>
-  <circle cx="256" cy="256" r="190" fill="#2f63c9"/>
-  <text x="256" y="300" font-family="Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji, sans-serif" font-size="230" text-anchor="middle">🤟</text>
-  <rect x="96" y="392" width="320" height="64" rx="32" fill="#8dc63f"/>
-  <text x="256" y="438" font-family="Helvetica, Arial, sans-serif" font-weight="800" font-size="40" fill="#12295e" text-anchor="middle" letter-spacing="3">ANMALU</text>
-</svg>

@@ -30,7 +30,8 @@ export function Navegacion() {
       <header className="sticky top-0 z-20 bg-navy text-white shadow-[0_4px_18px_rgba(0,0,0,.15)]">
         <div className="mx-auto flex max-w-3xl items-center gap-3 px-4 py-2.5 md:px-6">
           <Link href="/" className="flex items-center gap-2" aria-label="Inicio">
-            <span className="text-2xl" aria-hidden="true">🤟</span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/icons/logo-mark.svg" alt="" width={34} height={34} className="size-8" />
             <span className="font-display text-xl font-extrabold tracking-wide">
               DISCAP <b className="text-lime">ANMALU</b>
             </span>

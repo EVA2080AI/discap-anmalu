@@ -19,7 +19,9 @@ export default function Proyecto() {
       {/* ---------- Portada ---------- */}
       <section className="overflow-hidden rounded-card bg-gradient-to-br from-navy via-navy to-[#2f63c9] px-6 py-10 text-center text-white shadow-lift md:py-14">
         <p className="font-display text-sm font-extrabold uppercase tracking-[0.2em] text-sun">El proyecto</p>
-        <h1 className="mt-2 font-display text-4xl font-extrabold md:text-5xl">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/icons/logo-mark.svg" alt="" width={92} height={92} className="mx-auto mt-3 size-20 md:size-24" />
+        <h1 className="mt-3 font-display text-4xl font-extrabold md:text-5xl">
           DISCAP <span className="text-lime">ANMALU</span>
         </h1>
         <p className="mx-auto mt-3 max-w-lg text-lg text-white/90">Soluciones para personas con discapacidad</p>
