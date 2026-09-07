@@ -6,6 +6,18 @@
   <meta name="theme-color" content="#1c3f8f">
   <meta name="description" content="DISCAP ANMALU: traductor de Lengua de Señas Colombiana (LSC) con Ana Lucía, Antonella y María Paula.">
   <title>DISCAP ANMALU · Traductor LSC</title>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="DISCAP ANMALU · Traductor de Lengua de Señas Colombiana">
+  <meta property="og:description" content="Escribe una palabra y mírala en señas con Ana Lucía, Antonella y María Paula. Saludos, familia y colores en video.">
+  <meta property="og:image" content="https://discap-anmalu.vercel.app/img/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://discap-anmalu.vercel.app/">
+  <meta property="og:locale" content="es_CO">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="ANMALU">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
@@ -57,7 +69,7 @@
 
   <!-- ===== Pantalla: Traductor ===== -->
   <section class="pantalla" id="traductor">
-    <h2 class="titulo-pantalla">🔤 Traductor</h2>
+    <h1 class="titulo-pantalla">🔤 Traductor</h1>
 
     <!-- Paso 1: elegir avatar -->
     <div class="bloque">
@@ -114,7 +126,7 @@
         <button class="btn-icon" id="btnSiguiente" aria-label="Letra siguiente">⏭</button>
         <label class="velocidad">
           <span>Velocidad</span>
-          <input type="range" id="velocidad" min="400" max="2500" step="100" value="1200">
+          <span class="velocidad-extremos"><span>🐢 lento</span><input type="range" id="velocidad" min="400" max="2500" step="100" value="1700" aria-label="Velocidad: a la derecha más rápido"><span>rápido 🐇</span></span>
         </label>
       </div>
     </div>
@@ -129,7 +141,7 @@
 
   <!-- ===== Pantalla: Expresiones ===== -->
   <section class="pantalla" id="expresiones">
-    <h2 class="titulo-pantalla">🎬 Expresiones</h2>
+    <h1 class="titulo-pantalla">🎬 Expresiones</h1>
 
     <div class="categorias" id="categorias">
       <button class="categoria activo" data-categoria="saludos">
@@ -144,7 +156,7 @@
     </div>
 
     <div class="reproductor" id="reproductor" hidden>
-      <video id="video" playsinline controls preload="metadata"></video>
+      <video id="video" playsinline muted controls preload="none"></video>
       <div class="video-titulo" id="videoTitulo"></div>
     </div>
 
@@ -158,6 +170,7 @@
   <a href="https://github.com/EVA2080AI/discap-anmalu/issues" target="_blank" rel="noopener">Sugerir mejora</a>
 </footer>
 
+<script defer src="/_vercel/insights/script.js"></script>
 <script src="js/datos.js"></script>
 <script src="js/app.js"></script>
 </body>

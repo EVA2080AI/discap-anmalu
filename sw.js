@@ -1,10 +1,24 @@
 /* Service worker sencillo: guarda la app en caché para que abra sin internet.
    Las fotos y videos se guardan a medida que se van viendo. */
-const CACHE = "anmalu-v3";
-const BASE = ["./", "index.html", "css/style.css", "js/datos.js", "js/app.js", "manifest.json"];
+const CACHE = "anmalu-v4";
+importScripts("js/datos.js"); // trae LETRAS, AVATARES y archivoLetra()
+const BASE = ["./", "index.html", "css/style.css", "js/datos.js", "js/app.js", "manifest.json", "icons/icon-192.png", "icons/icon-512.png"];
+
+// Todas las fotos (unos 5 MB) para que el traductor funcione completo sin internet.
+const FOTOS = [];
+LETRAS.forEach(l => {
+  FOTOS.push(`img/senas/${archivoLetra(l)}.jpg`);
+  if (!LETRAS_SIN_AVATAR.includes(l)) Object.values(AVATARES).forEach(a => FOTOS.push(`img/avatares/${a.carpeta}/${archivoLetra(l)}.jpg`));
+});
 
 self.addEventListener("install", e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(BASE)).then(() => self.skipWaiting()));
+  e.waitUntil(
+    caches.open(CACHE).then(async c => {
+      await c.addAll(BASE);
+      // Las fotos se bajan una a una: si alguna falla no rompe la instalación.
+      await Promise.all(FOTOS.map(f => c.add(f).catch(() => {})));
+    }).then(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener("activate", e => {

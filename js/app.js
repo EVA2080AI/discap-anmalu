@@ -88,11 +88,27 @@ function traducir(texto) {
     avatar: estado.avatar === "aleatorio" ? elegirAleatorio(Object.keys(AVATARES)) : estado.avatar,
   }));
   estado.indice = 0;
+  precargarSecuencia();
   $("#escenario").hidden = false;
   pintarProgreso();
   mostrarLetra(0);
   iniciarReproduccion();
   $("#escenario").scrollIntoView({ behavior: "smooth", block: "start" });
+  registrarEvento("traducir", { letras: estado.secuencia.length, avatar: estado.avatar });
+}
+
+/** Evento de analítica (Vercel Web Analytics). No hace nada si no está activo. */
+function registrarEvento(nombre, datos) {
+  if (window.va) window.va("event", { name: nombre, data: datos });
+}
+
+/** Descarga por adelantado todas las fotos de la palabra para que no parpadee. */
+function precargarSecuencia() {
+  estado.secuencia.forEach(({ letra, avatar }) => {
+    if (letra === " ") return;
+    new Image().src = `img/senas/${archivoLetra(letra)}.jpg`;
+    if (!LETRAS_SIN_AVATAR.includes(letra)) new Image().src = `img/avatares/${AVATARES[avatar].carpeta}/${archivoLetra(letra)}.jpg`;
+  });
 }
 
 /** Dibuja la palabra con la letra actual resaltada. */
@@ -139,6 +155,7 @@ function pintarSena(letra, avatarId) {
     $("#fotoAvatar").removeAttribute("src");
     $("#nombreAvatar").textContent = "Seña formal (sin foto de avatar)";
   } else {
+    $("#fotoAvatar").onerror = () => { tarjeta.classList.add("solo-formal"); $("#nombreAvatar").textContent = `Falta la foto de ${avatar.nombre} para la ${letra}`; };
     $("#fotoAvatar").src = `img/avatares/${avatar.carpeta}/${archivoLetra(letra)}.jpg`;
     $("#fotoAvatar").alt = `${avatar.nombre} haciendo la letra ${letra}`;
     $("#nombreAvatar").textContent = avatar.nombre;
@@ -155,7 +172,8 @@ function iniciarReproduccion() {
 }
 
 function programarSiguiente() {
-  const ms = Number($("#velocidad").value);
+  // El deslizador va de 400 a 2500: a la derecha más rápido, así que invertimos la escala.
+  const ms = 2900 - Number($("#velocidad").value);
   estado.temporizador = setTimeout(() => {
     if (!estado.reproduciendo) return;
     if (estado.indice >= estado.secuencia.length - 1) { detenerReproduccion(); return; }
@@ -240,6 +258,7 @@ function reproducirExpresion(item) {
   video.src = `video/${categoriaActual}/${item.archivo}`;
   video.load();
   video.play().catch(() => {/* el usuario puede darle play manualmente */});
+  registrarEvento("video", { categoria: categoriaActual, nombre: item.nombre });
   rep.scrollIntoView({ behavior: "smooth", block: "start" });
   $$(".expresion").forEach(b => b.classList.toggle("activo", b.textContent.trim() === item.nombre));
 }
