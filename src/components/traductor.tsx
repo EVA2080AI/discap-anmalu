@@ -2,11 +2,11 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { Play, Pause, SkipBack, SkipForward, Turtle, Rabbit, Repeat, FlipHorizontal2, Delete, Volume2, VolumeX, Space } from "lucide-react";
+import { Play, Pause, SkipBack, SkipForward, Turtle, Rabbit, Repeat, FlipHorizontal2, Delete, Volume2, VolumeX, Space, Share2, Ear, SpellCheck } from "lucide-react";
 import { AVATARES, AVATAR_IDS, LETRAS, fotoOriginal, normalizar, senaFormal, type AvatarId } from "@/lib/datos";
 import { prefs } from "@/lib/preferencias";
 import { sonidoExito, sonidoToque } from "@/lib/sonido";
-import { TiraLetras, type PasoTira } from "@/components/tira-letras";
+import { TiraLetras, type PasoTira, type Video } from "@/components/tira-letras";
 import { cn } from "@/lib/utils";
 
 type Elegido = AvatarId | "aleatorio";
@@ -18,7 +18,7 @@ function elegirAleatorio<T>(lista: readonly T[]) {
 }
 
 /** Traductor: texto → letra por letra, con la foto de la niña y la seña formal. */
-export function Traductor({ fotosExtra }: { fotosExtra: Record<string, string> }) {
+export function Traductor({ fotosExtra, senas = {} }: { fotosExtra: Record<string, string>; senas?: Record<string, Video> }) {
   const params = useSearchParams();
   const [avatar, setAvatar] = useState<Elegido>("ana");
   const [texto, setTexto] = useState("");
@@ -32,6 +32,8 @@ export function Traductor({ fotosExtra }: { fotosExtra: Record<string, string> }
   const [silencio, setSilencio] = useState(false);
   const [ampliada, setAmpliada] = useState(false);
   const [fotoRota, setFotoRota] = useState<string | null>(null);
+  const [compartido, setCompartido] = useState("");
+  const toque = useRef<number | null>(null);
   const escenario = useRef<HTMLDivElement>(null);
   const campo = useRef<HTMLInputElement>(null);
 
@@ -44,12 +46,16 @@ export function Traductor({ fotosExtra }: { fotosExtra: Record<string, string> }
     (entrada: string, avatarElegido: Elegido = avatar) => {
       const limpio = normalizar(entrada);
       if (!limpio) { campo.current?.focus(); return; }
-      const pasos = limpio.split("").map(ch => ({
-        letra: ch,
-        avatar: avatarElegido === "aleatorio" ? elegirAleatorio(AVATAR_IDS) : avatarElegido,
-      }));
+      const elegir = () => (avatarElegido === "aleatorio" ? elegirAleatorio(AVATAR_IDS) : avatarElegido);
+      // Palabra por palabra: si tiene seña propia va el video; si no, se deletrea.
+      const pasos: PasoTira[] = [];
+      limpio.split(" ").forEach((palabra, i) => {
+        if (i > 0) pasos.push({ letra: " ", avatar: elegir() });
+        if (senas[palabra]) pasos.push({ letra: palabra, avatar: elegir(), video: senas[palabra] });
+        else palabra.split("").forEach(ch => pasos.push({ letra: ch, avatar: elegir() }));
+      });
       pasos.forEach(p => {
-        if (p.letra === " ") return;
+        if (p.letra === " " || p.video) return;
         new Image().src = senaFormal(p.letra);
         const f = fotoDe(p.avatar, p.letra);
         if (f) new Image().src = f;
@@ -59,7 +65,7 @@ export function Traductor({ fotosExtra }: { fotosExtra: Record<string, string> }
       setReproduciendo(true);
       setTimeout(() => escenario.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
     },
-    [avatar, fotoDe],
+    [avatar, fotoDe, senas],
   );
 
   // ?texto=hola (enlaces compartidos y modo feria) y preferencias del dispositivo
@@ -75,7 +81,7 @@ export function Traductor({ fotosExtra }: { fotosExtra: Record<string, string> }
 
   // reproducción automática; al final: bucle, o se detiene con un sonido de logro
   useEffect(() => {
-    if (!reproduciendo) return;
+    if (!reproduciendo || secuencia[indice]?.video) return; // los videos avanzan solos al terminar
     const t = setTimeout(() => {
       if (indice >= secuencia.length - 1) {
         if (bucle) setIndice(0);
@@ -83,12 +89,56 @@ export function Traductor({ fotosExtra }: { fotosExtra: Record<string, string> }
       } else setIndice(i => i + 1);
     }, 2900 - velocidad);
     return () => clearTimeout(t);
-  }, [reproduciendo, indice, secuencia.length, velocidad, bucle]);
+  }, [reproduciendo, indice, secuencia.length, velocidad, bucle, secuencia]);
+
+  const avanzar = useCallback(() => {
+    if (indice >= secuencia.length - 1) {
+      if (bucle) setIndice(0);
+      else { setReproduciendo(false); sonidoExito(); }
+    } else setIndice(i => i + 1);
+  }, [indice, secuencia.length, bucle]);
+
+  /** Cambia un paso de video por sus letras (para ver también el deletreo). */
+  const deletrearPaso = (i: number) => {
+    setSecuencia(s => {
+      const p = s[i]; if (!p?.video) return s;
+      const letras = p.letra.split("").map(ch => ({ letra: ch, avatar: p.avatar }));
+      return [...s.slice(0, i), ...letras, ...s.slice(i + 1)];
+    });
+  };
+
+  const compartir = async () => {
+    const url = `${location.origin}/traductor?texto=${encodeURIComponent(texto.trim())}`;
+    const mensaje = `Mira «${texto.trim()}» en Lengua de Señas Colombiana con DISCAP ANMALU 🤟 ${url}`;
+    try {
+      if (navigator.share) { await navigator.share({ title: "DISCAP ANMALU", text: mensaje }); setCompartido("¡Compartido!"); }
+      else { window.open(`https://wa.me/?text=${encodeURIComponent(mensaje)}`, "_blank", "noopener"); }
+    } catch { /* el usuario canceló */ }
+  };
+
+  const escuchar = () => {
+    if (!("speechSynthesis" in window) || !texto.trim()) return;
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(texto.trim());
+    u.lang = "es-CO"; u.rate = 0.9;
+    speechSynthesis.speak(u);
+  };
+
+  // Deslizar con el dedo sobre la foto: izquierda = siguiente, derecha = anterior
+  const alTocar = (e: React.TouchEvent) => { toque.current = e.touches[0].clientX; };
+  const alSoltar = (e: React.TouchEvent) => {
+    if (toque.current === null) return;
+    const dx = e.changedTouches[0].clientX - toque.current; toque.current = null;
+    if (Math.abs(dx) < 50) return;
+    setReproduciendo(false);
+    setIndice(i => Math.max(0, Math.min(i + (dx < 0 ? 1 : -1), secuencia.length - 1)));
+  };
 
   const paso = secuencia[indice];
   const esEspacio = paso?.letra === " ";
-  const foto = paso && !esEspacio ? fotoDe(paso.avatar, paso.letra) : null;
-  const soloFormal = !!paso && !esEspacio && (!foto || fotoRota === foto);
+  const esVideo = !!paso?.video;
+  const foto = paso && !esEspacio && !esVideo ? fotoDe(paso.avatar, paso.letra) : null;
+  const soloFormal = !!paso && !esEspacio && !esVideo && (!foto || fotoRota === foto);
 
   const ir = (i: number) => { setReproduciendo(false); setIndice(Math.max(0, Math.min(i, secuencia.length - 1))); };
   const play = () => {
@@ -183,8 +233,14 @@ export function Traductor({ fotosExtra }: { fotosExtra: Record<string, string> }
       <div ref={escenario} className="scroll-mt-20 md:sticky md:top-20">
         {paso ? (
           <section aria-live="polite">
-            <div className="tarjeta relative mx-auto aspect-[3/4] max-h-[62vh] w-full overflow-hidden">
-              {esEspacio ? (
+            <div className="tarjeta relative mx-auto aspect-[3/4] max-h-[62vh] w-full overflow-hidden" onTouchStart={alTocar} onTouchEnd={alSoltar}>
+              {esVideo && paso.video ? (
+                <>
+                  <video key={paso.video.url} src={paso.video.url} poster={paso.video.poster ?? undefined} playsInline muted autoPlay preload="auto" onEnded={() => { if (reproduciendo) avanzar(); }} className={cn("size-full bg-black object-contain", espejo && "-scale-x-100")} />
+                  <span className="absolute left-3 top-3 rounded-full bg-lime px-3 py-1.5 text-sm font-extrabold text-white shadow-soft">Seña propia: {paso.video.nombre}</span>
+                  <button type="button" onClick={() => deletrearPaso(indice)} className="absolute bottom-3 left-3 flex min-h-10 items-center gap-1.5 rounded-full bg-white/90 px-3 text-sm font-extrabold text-navy shadow-soft"><SpellCheck className="size-4" aria-hidden="true" /> Letra por letra</button>
+                </>
+              ) : esEspacio ? (
                 <div className="flex h-full flex-col items-center justify-center gap-2 bg-gradient-to-br from-sun-soft to-cream font-display text-2xl text-navy">
                   <span className="text-8xl leading-none" aria-hidden="true">🤲</span>
                   siguiente palabra
@@ -242,6 +298,12 @@ export function Traductor({ fotosExtra }: { fotosExtra: Record<string, string> }
               </label>
             </div>
             {espejo && <p className="mt-2 text-center text-xs text-mist">Espejo: así ves la seña como si la hicieras tú.</p>}
+            <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
+              <button type="button" onClick={compartir} className="flex min-h-11 items-center gap-1.5 rounded-full bg-white px-4 text-sm font-extrabold text-navy shadow-soft"><Share2 className="size-4" aria-hidden="true" /> Compartir</button>
+              <button type="button" onClick={escuchar} className="flex min-h-11 items-center gap-1.5 rounded-full bg-white px-4 text-sm font-extrabold text-navy shadow-soft"><Ear className="size-4" aria-hidden="true" /> Escuchar</button>
+              {compartido && <span className="text-sm font-bold text-[#2e6b12]">{compartido}</span>}
+            </div>
+            <p className="mt-2 text-center text-xs text-mist">Desliza la foto con el dedo para pasar de letra.</p>
           </section>
         ) : (
           <div className="tarjeta hidden aspect-[3/4] flex-col items-center justify-center gap-2 p-8 text-center text-mist md:flex">

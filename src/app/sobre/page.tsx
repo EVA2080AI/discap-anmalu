@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "Qué es y cómo se usa" };
 const PASOS = [
   {
     Icono: Hand, titulo: "Traductor", color: "bg-navy",
-    pasos: ["Elige quién hace las señas: Ana Lucía, Antonella, María Paula o al azar.", "Escribe una palabra (o tu nombre) con el teclado o tocando el abecedario.", "Mira la palabra letra por letra: la foto grande es la seña y el recuadro es la seña formal. Toca el recuadro para agrandarlo."],
+    pasos: ["Elige quién hace las señas: Ana Lucía, Antonella, María Paula o al azar.", "Escribe una palabra (o tu nombre) con el teclado o tocando el abecedario.", "Mira la palabra: si tiene seña propia verás el video; si no, va letra por letra con la foto grande y el recuadro de la seña formal."],
     extra: "Con «Repetir» la palabra da vueltas sola para que la imites. Con «Espejo» la ves como si la hicieras tú.",
   },
   {
@@ -81,7 +81,7 @@ export default function Sobre() {
       <section className="mt-8">
         <h2 className="mb-2 flex items-center gap-2 text-xl font-extrabold text-navy"><Sparkles className="size-6" aria-hidden="true" /> Cosas para saber</h2>
         <ul className="grid gap-2 text-[15px]">
-          <li className="tarjeta p-3">El traductor <b>deletrea</b> (dactilología). En LSC muchas palabras tienen su propia seña: esas están en <Link href="/expresiones" className="font-bold text-navy underline">Expresiones</Link>, y cada video nuevo hace crecer la app.</li>
+          <li className="tarjeta p-3">Si una palabra tiene <b>seña propia</b> (como «hola» o «mamá»), el traductor muestra su video; si no, la <b>deletrea</b> letra por letra. Las señas propias salen de <Link href="/expresiones" className="font-bold text-navy underline">Expresiones</Link>: cada video nuevo hace crecer el traductor.</li>
           <li className="tarjeta p-3">Las fotos muestran a las niñas de frente, así que su mano derecha queda a tu izquierda. Usa <b>Espejo</b> en el traductor para copiar la seña más fácil.</li>
           <li className="tarjeta p-3">Las señas formales vienen del material «Inclusión al día». Las fotos y videos son de uso exclusivo de esta app.</li>
         </ul>
