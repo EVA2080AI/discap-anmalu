@@ -60,6 +60,7 @@ h1, h2, h3, .display {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
 
+@layer components {
 /* Botón principal con "suelo" (se hunde al tocarlo) */
 .btn-principal {
   @apply inline-flex items-center justify-center gap-2 rounded-2xl bg-navy px-6 py-4 text-lg font-extrabold text-white transition-transform;
@@ -87,9 +88,11 @@ h1, h2, h3, .display {
 }
 .tecla:active, .tecla.activo { transform: translateY(3px); box-shadow: 0 1px 0 var(--color-line); }
 .tecla.activo { @apply bg-sun text-navy-deep; }
+}
 
 @keyframes aparecer { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 .aparecer { animation: aparecer .3s ease both; }
+@keyframes sacudir { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
 @keyframes celebrar { 0% { transform: scale(.85); } 60% { transform: scale(1.06); } 100% { transform: scale(1); } }
 .celebrar { animation: celebrar .5s ease; }
 

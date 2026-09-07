@@ -2,13 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Hand, Clapperboard, Mailbox } from "lucide-react";
+import { Home, Hand, Clapperboard, Gamepad2, Mailbox } from "lucide-react";
+import { VigilanteFeria } from "@/components/feria";
 import { cn } from "@/lib/utils";
 
 const RUTAS = [
   { href: "/", texto: "Inicio", Icono: Home },
   { href: "/traductor", texto: "Traductor", Icono: Hand },
   { href: "/expresiones", texto: "Expresiones", Icono: Clapperboard },
+  { href: "/practicar", texto: "Practicar", Icono: Gamepad2 },
   { href: "/ideas", texto: "Ideas", Icono: Mailbox },
 ];
 
@@ -16,10 +18,14 @@ const RUTAS = [
 export function Navegacion() {
   const ruta = usePathname();
   const esAdmin = ruta.startsWith("/admin");
+  const esFeria = ruta === "/feria";
   const activa = (href: string) => (href === "/" ? ruta === "/" : ruta.startsWith(href));
+
+  if (esFeria) return null;
 
   return (
     <>
+      <VigilanteFeria ruta={ruta} />
       <header className="sticky top-0 z-20 bg-navy text-white shadow-[0_4px_18px_rgba(0,0,0,.15)]">
         <div className="mx-auto flex max-w-3xl items-center gap-3 px-4 py-2.5 md:px-6">
           <Link href="/" className="flex items-center gap-2" aria-label="Inicio">
@@ -34,7 +40,7 @@ export function Navegacion() {
                 key={href}
                 href={href}
                 className={cn(
-                  "flex items-center gap-2 rounded-full px-4 py-2 font-bold transition-colors",
+                  "flex items-center gap-2 rounded-full px-3.5 py-2 font-bold transition-colors",
                   activa(href) ? "bg-white/15 text-sun" : "text-white/85 hover:bg-white/10",
                 )}
               >
@@ -43,9 +49,9 @@ export function Navegacion() {
               </Link>
             ))}
           </nav>
-          <span className="ml-auto rounded-full bg-sun px-3 py-1 text-xs font-extrabold tracking-widest text-navy-deep md:ml-2">
-            {esAdmin ? "SUBIDAS" : "LSC"}
-          </span>
+          <Link href="/sobre" className="ml-auto rounded-full bg-sun px-3 py-1 text-xs font-extrabold tracking-widest text-navy-deep md:ml-2" aria-label="Qué es y cómo se usa">
+            {esAdmin ? "SUBIDAS" : "¿QUÉ ES?"}
+          </Link>
         </div>
       </header>
 
@@ -55,18 +61,18 @@ export function Navegacion() {
           style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
           aria-label="Secciones"
         >
-          <ul className="mx-auto grid max-w-md grid-cols-4">
+          <ul className="mx-auto grid max-w-md grid-cols-5">
             {RUTAS.map(({ href, texto, Icono }) => (
               <li key={href}>
                 <Link
                   href={href}
                   className={cn(
-                    "flex min-h-16 flex-col items-center justify-center gap-1 text-xs font-extrabold transition-colors",
+                    "flex min-h-16 flex-col items-center justify-center gap-1 text-[11px] font-extrabold transition-colors",
                     activa(href) ? "text-navy" : "text-mist",
                   )}
                   aria-current={activa(href) ? "page" : undefined}
                 >
-                  <span className={cn("rounded-2xl px-4 py-1 transition-colors", activa(href) && "bg-sun-soft")}>
+                  <span className={cn("rounded-2xl px-3.5 py-1 transition-colors", activa(href) && "bg-sun-soft")}>
                     <Icono className="size-6" aria-hidden="true" />
                   </span>
                   {texto}

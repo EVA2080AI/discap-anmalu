@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Hand, Clapperboard, Mailbox, ArrowRight } from "lucide-react";
+import { Hand, Clapperboard, Gamepad2, Mailbox, ArrowRight, Info, Presentation } from "lucide-react";
 
 export default function Inicio() {
   return (
@@ -16,17 +16,20 @@ export default function Inicio() {
           Hablemos con las <span className="text-lime">manos</span>
         </h1>
         <p className="mx-auto mt-3 max-w-md text-mist md:text-lg">
-          Traductor de <strong className="text-ink">Lengua de Señas Colombiana</strong> hecho por Ana Lucía, Antonella y María Paula.
+          Escribe una palabra y mírala en <strong className="text-ink">Lengua de Señas Colombiana</strong>, con Ana Lucía, Antonella y María Paula.
         </p>
+        <Link href="/sobre" className="mt-3 inline-flex min-h-11 items-center gap-1.5 rounded-full bg-white px-4 text-sm font-extrabold text-navy shadow-soft">
+          <Info className="size-4" aria-hidden="true" /> ¿Qué es y cómo se usa?
+        </Link>
       </section>
 
       {/* Menú principal */}
-      <nav className="mt-8 grid gap-4 md:grid-cols-2" aria-label="Menú principal">
+      <nav className="mt-7 grid gap-4 md:grid-cols-2" aria-label="Menú principal">
         <Link href="/traductor" className="group grid grid-cols-[64px_1fr] items-center gap-4 rounded-card bg-gradient-to-br from-navy to-[#2f63c9] p-5 text-white shadow-soft transition-transform active:scale-[.98]">
           <span className="grid size-16 place-items-center rounded-2xl bg-white/15"><Hand className="size-9" aria-hidden="true" /></span>
           <span>
             <span className="flex items-center gap-2 font-display text-2xl font-extrabold">Traductor <ArrowRight className="size-5 opacity-70 transition-transform group-hover:translate-x-1" aria-hidden="true" /></span>
-            <span className="text-sm text-white/90">Escribe una palabra y mírala letra por letra en señas</span>
+            <span className="text-sm text-white/90">Tu nombre o cualquier palabra, letra por letra</span>
           </span>
         </Link>
         <Link href="/expresiones" className="group grid grid-cols-[64px_1fr] items-center gap-4 rounded-card bg-gradient-to-br from-[#5a9d1c] to-lime p-5 text-white shadow-soft transition-transform active:scale-[.98]">
@@ -36,18 +39,26 @@ export default function Inicio() {
             <span className="text-sm text-white/90">Saludos, familia y colores en video</span>
           </span>
         </Link>
+        <Link href="/practicar" className="group grid grid-cols-[64px_1fr] items-center gap-4 rounded-card bg-gradient-to-br from-coral to-[#f47b20] p-5 text-white shadow-soft transition-transform active:scale-[.98]">
+          <span className="grid size-16 place-items-center rounded-2xl bg-white/15"><Gamepad2 className="size-9" aria-hidden="true" /></span>
+          <span>
+            <span className="flex items-center gap-2 font-display text-2xl font-extrabold">Practicar <ArrowRight className="size-5 opacity-70 transition-transform group-hover:translate-x-1" aria-hidden="true" /></span>
+            <span className="text-sm text-white/90">Adivina la letra y cuida tu racha</span>
+          </span>
+        </Link>
+        <Link href="/ideas" className="group grid grid-cols-[64px_1fr] items-center gap-4 rounded-card border-[3px] border-transparent bg-white p-5 text-ink shadow-soft transition-colors active:border-sun">
+          <span className="grid size-16 place-items-center rounded-2xl bg-sun-soft text-navy"><Mailbox className="size-9" aria-hidden="true" /></span>
+          <span>
+            <span className="flex items-center gap-2 font-display text-2xl font-extrabold text-navy">Buzón de ideas <ArrowRight className="size-5 opacity-60 transition-transform group-hover:translate-x-1" aria-hidden="true" /></span>
+            <span className="text-sm text-mist">Cuéntanos qué te gustó o qué mejorarías</span>
+          </span>
+        </Link>
       </nav>
 
-      <Link href="/ideas" className="mt-4 flex items-center gap-4 rounded-card border-[3px] border-transparent bg-white p-4 shadow-soft transition-colors active:border-sun">
-        <span className="grid size-12 place-items-center rounded-2xl bg-sun-soft text-navy"><Mailbox className="size-7" aria-hidden="true" /></span>
-        <span>
-          <b className="font-display text-lg text-navy">Buzón de ideas</b>
-          <br />
-          <small className="text-mist">Cuéntanos qué te gustó o qué mejorarías</small>
-        </span>
-      </Link>
-
-      <p className="mt-8 text-center text-sm text-mist">Proyecto escolar · Feria Inspírate 2026</p>
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-mist">
+        <span>Proyecto escolar · Feria Inspírate 2026</span>
+        <Link href="/feria" className="inline-flex min-h-11 items-center gap-1 font-bold text-navy"><Presentation className="size-4" aria-hidden="true" /> Modo feria</Link>
+      </div>
     </div>
   );
 }

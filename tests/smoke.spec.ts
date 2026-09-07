@@ -28,6 +28,17 @@ test("un video de expresiones reproduce", async ({ page }) => {
   await expect.poll(async () => video.evaluate(v => (v as HTMLVideoElement).readyState), { timeout: 20000 }).toBeGreaterThanOrEqual(2);
 });
 
+test("practicar muestra una seña y cuatro letras", async ({ page }) => {
+  await page.goto(BASE + "/practicar");
+  await expect(page.getByAltText("Seña para adivinar")).toBeVisible();
+  await expect(page.getByRole("group", { name: "Opciones" }).getByRole("button")).toHaveCount(4);
+});
+
+test("la página «qué es» explica cómo usar la app", async ({ page }) => {
+  await page.goto(BASE + "/sobre");
+  await expect(page.getByRole("heading", { name: "¿Cómo se usa?" })).toBeVisible();
+});
+
 test("el buzón de ideas se ve", async ({ page }) => {
   await page.goto(BASE + "/ideas");
   await expect(page.getByRole("heading", { name: "Buzón de ideas" })).toBeVisible();

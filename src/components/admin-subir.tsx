@@ -62,7 +62,7 @@ function Resultado({ r }: { r: { ok: boolean; texto: string } | null }) {
 // =====================================================================
 // FOTO DE LETRA
 // =====================================================================
-export function SubirFoto() {
+export function SubirFoto({ letrasConFoto, total }: { letrasConFoto?: Record<AvatarId, number>; total?: number }) {
   const [autor, setAutor] = useAutor();
   const [avatar, setAvatar] = useState<AvatarId | "">("");
   const [letra, setLetra] = useState("");
@@ -115,9 +115,16 @@ export function SubirFoto() {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={fotoOriginal(id, "A") ?? ""} alt="" className="size-14 rounded-full object-cover object-top" />
               {AVATARES[id].nombre}
+              {letrasConFoto && total && (
+                <span className="w-full">
+                  <span className="block h-1.5 overflow-hidden rounded-full bg-line"><span className="block h-full rounded-full bg-lime" style={{ width: `${Math.round((letrasConFoto[id] / total) * 100)}%` }} /></span>
+                  <span className="text-[11px] font-semibold text-mist">{letrasConFoto[id]} de {total} letras</span>
+                </span>
+              )}
             </button>
           ))}
         </div>
+        {letrasConFoto && total && Object.values(letrasConFoto).some(n => n < total) && <p className="mt-2 text-sm text-mist">Falta la <b>Ñ</b>: cuando las tres la tengan, el traductor deja de mostrar solo la seña formal.</p>}
       </section>
 
       <section className="mb-5">

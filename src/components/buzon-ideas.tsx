@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { Send } from "lucide-react";
 import { TIPOS_IDEA, ESTADOS_IDEA, type TipoIdea, type EstadoIdea } from "@/lib/datos";
+import { prefs } from "@/lib/preferencias";
+import { sonidoExito } from "@/lib/sonido";
 import { cn } from "@/lib/utils";
 
 export type IdeaPublica = { id: string; tipo: TipoIdea; nombre: string; mensaje: string; estado: EstadoIdea; respuesta: string | null; creadoEn: string };
@@ -14,11 +16,12 @@ export function BuzonIdeas() {
   const [enviando, setEnviando] = useState(false);
   const [resultado, setResultado] = useState<{ ok: boolean; texto: string } | null>(null);
   const [ideas, setIdeas] = useState<IdeaPublica[] | null>(null);
+  const [mias, setMias] = useState<string[]>([]);
 
   const cargar = useCallback(async () => {
     try { setIdeas(await (await fetch("/api/ideas", { cache: "no-store" })).json()); } catch { setIdeas([]); }
   }, []);
-  useEffect(() => { const t = setTimeout(cargar, 0); return () => clearTimeout(t); }, [cargar]);
+  useEffect(() => { const t = setTimeout(() => { setMias(prefs.misIdeas()); cargar(); }, 0); return () => clearTimeout(t); }, [cargar]);
 
   const enviar = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,6 +32,8 @@ export function BuzonIdeas() {
       if (!r.ok) throw new Error(d.error || "No se pudo enviar");
       setResultado({ ok: true, texto: "🎉 ¡Gracias! Tu idea ya está en el buzón." });
       setMensaje("");
+      if (d.id) { prefs.agregarIdea(d.id); setMias(m => [...m, d.id]); }
+      sonidoExito();
       cargar();
     } catch (ex) {
       setResultado({ ok: false, texto: "😕 " + (ex as Error).message });
@@ -69,7 +74,7 @@ export function BuzonIdeas() {
           <p className="text-mist">Sé la primera persona en dejar una idea. 🌱</p>
         ) : (
           <ul className="grid gap-3">
-            {ideas.map(i => <TarjetaIdea key={i.id} idea={i} />)}
+            {[...ideas].sort((a, b) => Number(mias.includes(b.id)) - Number(mias.includes(a.id))).map(i => <TarjetaIdea key={i.id} idea={i} mia={mias.includes(i.id)} />)}
           </ul>
         )}
       </section>
@@ -77,10 +82,11 @@ export function BuzonIdeas() {
   );
 }
 
-export function TarjetaIdea({ idea, children }: { idea: IdeaPublica; children?: React.ReactNode }) {
+export function TarjetaIdea({ idea, mia, children }: { idea: IdeaPublica; mia?: boolean; children?: React.ReactNode }) {
   return (
-    <li className="tarjeta grid gap-1.5 p-4">
+    <li className={cn("tarjeta grid gap-1.5 p-4", mia && "border-[3px] border-sun")}>
       <div className="flex flex-wrap items-center gap-2">
+        {mia && <span className="rounded-full bg-sun px-2 py-0.5 text-xs font-extrabold text-navy-deep">Tu idea</span>}
         <span className="text-2xl" aria-hidden="true">{TIPOS_IDEA[idea.tipo]?.emoji ?? "💬"}</span>
         <span className="font-extrabold text-navy-deep">{idea.nombre}</span>
         <span className={cn("ml-auto rounded-full px-2.5 py-1 text-xs font-extrabold", idea.estado === "lista" ? "bg-lime-soft text-[#2e6b12]" : idea.estado === "en-proceso" ? "bg-navy-soft text-navy" : "bg-sun-soft text-[#8a6d00]")}>

@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Search } from "lucide-react";
+import { Search, Star, Repeat, Turtle } from "lucide-react";
+import { normalizar } from "@/lib/datos";
+import { prefs } from "@/lib/preferencias";
+import { TiraLetras } from "@/components/tira-letras";
 import { cn } from "@/lib/utils";
 
 export type Item = { id: string; nombre: string; url: string; poster: string | null; color: string | null };
@@ -11,23 +14,39 @@ export function Expresiones({ categorias }: { categorias: Categoria[] }) {
   const [activa, setActiva] = useState(categorias[0]?.slug ?? "");
   const [busqueda, setBusqueda] = useState("");
   const [actual, setActual] = useState<(Item & { categoria: string }) | null>(null);
+  const [favoritos, setFavoritos] = useState<string[]>([]);
+  const [bucle, setBucle] = useState(true);
+  const [lento, setLento] = useState(false);
   const video = useRef<HTMLVideoElement>(null);
 
+  useEffect(() => { const t = setTimeout(() => setFavoritos(prefs.favoritos()), 0); return () => clearTimeout(t); }, []);
+
+  const todas = useMemo(() => categorias.flatMap(c => c.items.map(i => ({ ...i, categoria: c.titulo, emoji: c.emoji }))), [categorias]);
   const buscando = busqueda.trim().length > 0;
   const lista = useMemo(() => {
-    if (buscando) {
-      const q = busqueda.trim().toLowerCase();
-      return categorias.flatMap(c => c.items.filter(i => i.nombre.toLowerCase().includes(q)).map(i => ({ ...i, categoria: c.titulo, emoji: c.emoji })));
-    }
+    if (buscando) { const q = busqueda.trim().toLowerCase(); return todas.filter(i => i.nombre.toLowerCase().includes(q)); }
+    if (activa === "__favoritos__") return todas.filter(i => favoritos.includes(i.id));
     const c = categorias.find(x => x.slug === activa);
     return c ? c.items.map(i => ({ ...i, categoria: c.titulo, emoji: c.emoji })) : [];
-  }, [categorias, activa, busqueda, buscando]);
+  }, [categorias, todas, activa, busqueda, buscando, favoritos]);
 
+  // Al cambiar de video: cargar y reproducir. load() reinicia la velocidad, por eso
+  // la cámara lenta se aplica aparte y también al cargar los metadatos.
   useEffect(() => {
-    if (!actual || !video.current) return;
-    video.current.load();
-    video.current.play().catch(() => {});
+    const v = video.current;
+    if (!actual || !v) return;
+    v.load();
+    v.play().catch(() => {});
   }, [actual]);
+  useEffect(() => {
+    const v = video.current;
+    if (v) { v.defaultPlaybackRate = lento ? 0.5 : 1; v.playbackRate = lento ? 0.5 : 1; }
+  }, [lento, actual]);
+
+  const alternarFavorito = (id: string) => setFavoritos(prefs.alternarFavorito(id));
+
+  // Deletreo del nombre debajo del video, con las fotos de Ana Lucía
+  const deletreo = useMemo(() => (actual ? normalizar(actual.nombre).split("").map(letra => ({ letra, avatar: "ana" as const })) : []), [actual]);
 
   return (
     <div className="aparecer">
@@ -46,39 +65,68 @@ export function Expresiones({ categorias }: { categorias: Categoria[] }) {
               {c.titulo}
             </button>
           ))}
+          <button type="button" role="tab" aria-selected={activa === "__favoritos__"} onClick={() => setActiva("__favoritos__")} className={cn("ficha sol shrink-0 flex-row px-4 text-base", activa === "__favoritos__" && "activo")}>
+            <Star className="size-6 fill-sun text-sun" aria-hidden="true" />
+            Favoritos{favoritos.length ? ` (${favoritos.length})` : ""}
+          </button>
         </div>
       )}
 
       <div className="md:grid md:grid-cols-[minmax(260px,320px)_1fr] md:items-start md:gap-6">
         {actual && (
-          <div className="tarjeta mb-4 overflow-hidden bg-black md:sticky md:top-20">
-            <video ref={video} playsInline muted controls preload="metadata" poster={actual.poster ?? undefined} className="mx-auto block max-h-[60vh] w-full bg-black">
-              <source src={actual.url} type="video/mp4" />
-            </video>
-            <div className="bg-navy px-4 py-2.5 font-display text-xl text-white">{actual.nombre}</div>
+          <div className="mb-4 md:sticky md:top-20">
+            <div className="tarjeta overflow-hidden bg-black">
+              <video ref={video} playsInline muted controls loop={bucle} preload="metadata" poster={actual.poster ?? undefined} onLoadedMetadata={e => { e.currentTarget.playbackRate = lento ? 0.5 : 1; }} className="mx-auto block max-h-[55vh] w-full bg-black">
+                <source src={actual.url} type="video/mp4" />
+              </video>
+              <div className="flex items-center gap-2 bg-navy px-4 py-2.5 text-white">
+                <span className="font-display text-xl">{actual.nombre}</span>
+                <button type="button" onClick={() => alternarFavorito(actual.id)} aria-pressed={favoritos.includes(actual.id)} aria-label="Favorito" className="ml-auto grid size-10 place-items-center rounded-full bg-white/15">
+                  <Star className={cn("size-5", favoritos.includes(actual.id) && "fill-sun text-sun")} />
+                </button>
+              </div>
+            </div>
+            <div className="mt-2 flex flex-wrap justify-center gap-2">
+              <button type="button" onClick={() => setBucle(b => !b)} aria-pressed={bucle} className={cn("flex min-h-11 items-center gap-1.5 rounded-full bg-white px-4 text-sm font-extrabold text-navy shadow-soft", bucle && "bg-sun text-navy-deep")}><Repeat className="size-4" aria-hidden="true" /> Repetir</button>
+              <button type="button" onClick={() => setLento(l => !l)} aria-pressed={lento} className={cn("flex min-h-11 items-center gap-1.5 rounded-full bg-white px-4 text-sm font-extrabold text-navy shadow-soft", lento && "bg-sun text-navy-deep")}><Turtle className="size-4" aria-hidden="true" /> Cámara lenta</button>
+            </div>
+            {deletreo.length > 0 && (
+              <div className="mt-3">
+                <p className="mb-1.5 text-center text-xs font-bold text-mist">Letra por letra</p>
+                <TiraLetras pasos={deletreo} tamano="sm" />
+              </div>
+            )}
           </div>
         )}
 
         <div className={cn("grid gap-3", actual ? "grid-cols-2 sm:grid-cols-3" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4")}>
           {lista.map(item => (
-            <button
-              key={item.id}
-              type="button"
-              onClick={() => setActual(item)}
-              className={cn("ficha flex-row justify-start gap-3 px-3 py-3 text-left text-base", actual?.id === item.id && "border-navy")}
-            >
-              {item.color ? (
-                <span className="size-6 shrink-0 rounded-full border-2 border-line" style={{ background: item.color }} aria-hidden="true" />
-              ) : (
-                <span className="text-xl" aria-hidden="true">{item.emoji}</span>
-              )}
-              <span>
-                {item.nombre}
-                {buscando && <small className="block text-xs font-semibold text-mist">{item.categoria}</small>}
-              </span>
-            </button>
+            <div key={item.id} className="relative">
+              <button
+                type="button"
+                onClick={() => setActual(item)}
+                className={cn("ficha w-full flex-row justify-start gap-3 px-3 py-3 pr-11 text-left text-base", actual?.id === item.id && "border-navy")}
+              >
+                {item.color ? (
+                  <span className="size-6 shrink-0 rounded-full border-2 border-line" style={{ background: item.color }} aria-hidden="true" />
+                ) : (
+                  <span className="text-xl" aria-hidden="true">{item.emoji}</span>
+                )}
+                <span>
+                  {item.nombre}
+                  {(buscando || activa === "__favoritos__") && <small className="block text-xs font-semibold text-mist">{item.categoria}</small>}
+                </span>
+              </button>
+              <button type="button" onClick={() => alternarFavorito(item.id)} aria-pressed={favoritos.includes(item.id)} aria-label={`Favorito: ${item.nombre}`} className="absolute right-1 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-full text-mist">
+                <Star className={cn("size-5", favoritos.includes(item.id) && "fill-sun text-sun")} />
+              </button>
+            </div>
           ))}
-          {!lista.length && <p className="col-span-full py-6 text-center text-mist">No encontré esa seña. ¿La grabamos? Déjala en el buzón de ideas.</p>}
+          {!lista.length && (
+            <p className="col-span-full py-6 text-center text-mist">
+              {activa === "__favoritos__" && !buscando ? "Toca la ⭐ de una seña para guardarla aquí." : "No encontré esa seña. ¿La grabamos? Déjala en el buzón de ideas."}
+            </p>
+          )}
         </div>
       </div>
     </div>

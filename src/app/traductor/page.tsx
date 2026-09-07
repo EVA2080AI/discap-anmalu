@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { prisma } from "@/lib/prisma";
 import { Traductor } from "@/components/traductor";
 
@@ -17,5 +18,9 @@ export default async function PaginaTraductor() {
     const clave = `${f.avatar}/${f.letra}`;
     if (!extra[clave]) extra[clave] = f.url; // la más reciente gana
   }
-  return <Traductor fotosExtra={extra} />;
+  return (
+    <Suspense>
+      <Traductor fotosExtra={extra} />
+    </Suspense>
+  );
 }
