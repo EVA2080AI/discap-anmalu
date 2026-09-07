@@ -58,8 +58,8 @@ export function Practicar({ fotosExtra }: { fotosExtra: Record<string, string> }
 
   return (
     <div className="aparecer md:grid md:grid-cols-[1fr_minmax(300px,380px)] md:items-start md:gap-8">
-      <div className="mb-5 md:order-last md:sticky md:top-20 md:mb-0">
-        <div className="tarjeta relative mx-auto aspect-[3/4] max-h-[55vh] w-full overflow-hidden">
+      <div className="mb-3 md:order-last md:sticky md:top-20 md:mb-0">
+        <div className="tarjeta relative mx-auto aspect-[3/4] max-h-[34vh] w-full overflow-hidden md:max-h-[55vh]">
           {foto && reto ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img key={foto} src={foto} alt="Seña para adivinar" className="size-full object-cover" />
@@ -72,12 +72,12 @@ export function Practicar({ fotosExtra }: { fotosExtra: Record<string, string> }
       </div>
       <div>
         <h1 className="mb-1 text-3xl font-extrabold text-navy">Practicar</h1>
-        <p className="mb-4 text-mist">Mira la seña y toca la letra correcta. Las letras que falles vuelven a salir hasta que las domines.</p>
+        <p className="mb-2 text-sm text-mist md:mb-4 md:text-base">Mira la seña y toca la letra correcta. Las letras que falles vuelven a salir hasta que las domines.</p>
 
-        <div className="mb-5 grid grid-cols-3 gap-2 text-center">
-          <div className="tarjeta p-3"><b className="block font-display text-2xl text-navy">{aciertos}<span className="text-sm text-mist">/{intentos}</span></b><span className="text-xs font-bold text-mist">aciertos</span></div>
-          <div className={cn("tarjeta p-3", racha >= 3 && "bg-sun-soft")}><b className="flex items-center justify-center gap-1 font-display text-2xl text-navy"><Flame className={cn("size-5", racha >= 3 ? "text-coral" : "text-mist")} aria-hidden="true" />{racha}</b><span className="text-xs font-bold text-mist">racha</span></div>
-          <div className="tarjeta p-3"><b className="flex items-center justify-center gap-1 font-display text-2xl text-navy"><Trophy className="size-5 text-sun" aria-hidden="true" />{mejor}</b><span className="text-xs font-bold text-mist">mejor racha</span></div>
+        <div className="mb-3 grid grid-cols-3 gap-2 text-center md:mb-5">
+          <div className="tarjeta p-2 sm:p-3"><b className="block font-display text-xl text-navy sm:text-2xl">{aciertos}<span className="text-sm text-mist">/{intentos}</span></b><span className="text-xs font-bold text-mist">aciertos</span></div>
+          <div className={cn("tarjeta p-2 sm:p-3", racha >= 3 && "bg-sun-soft")}><b className="flex items-center justify-center gap-1 font-display text-xl text-navy sm:text-2xl"><Flame className={cn("size-5", racha >= 3 ? "text-coral" : "text-mist")} aria-hidden="true" />{racha}</b><span className="text-xs font-bold text-mist">racha</span></div>
+          <div className="tarjeta p-2 sm:p-3"><b className="flex items-center justify-center gap-1 font-display text-xl text-navy sm:text-2xl"><Trophy className="size-5 text-sun" aria-hidden="true" />{mejor}</b><span className="text-xs font-bold text-mist">mejor racha</span></div>
         </div>
 
         {reto && (

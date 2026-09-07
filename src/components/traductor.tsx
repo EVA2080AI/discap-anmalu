@@ -234,7 +234,7 @@ export function Traductor({ fotosExtra, senas = {} }: { fotosExtra: Record<strin
       <div ref={escenario} className="scroll-mt-20 md:sticky md:top-20">
         {paso ? (
           <section aria-live="polite">
-            <div className="tarjeta relative mx-auto aspect-[3/4] max-h-[62vh] w-full overflow-hidden" onTouchStart={alTocar} onTouchEnd={alSoltar}>
+            <div className="tarjeta relative mx-auto aspect-[3/4] max-h-[42vh] w-full overflow-hidden md:max-h-[62vh]" onTouchStart={alTocar} onTouchEnd={alSoltar}>
               {esVideo && paso.video ? (
                 <>
                   <video key={paso.video.url} src={paso.video.url} poster={paso.video.poster ?? undefined} playsInline muted autoPlay preload="auto" onEnded={() => { if (reproduciendo) avanzar(); }} className={cn("size-full bg-black object-contain", espejo && "-scale-x-100")} />

@@ -155,8 +155,8 @@ function Quiz({ items, onTerminar }: { items: Item[]; onTerminar: () => void }) 
   return (
     <div className="mt-4 md:grid md:grid-cols-[minmax(240px,300px)_1fr] md:gap-5">
       <div className="tarjeta mb-4 overflow-hidden bg-black md:sticky md:top-20">
-        <video ref={video} playsInline muted loop autoPlay preload="auto" poster={actual.poster ?? undefined} className="mx-auto block max-h-[45vh] w-full bg-black"><source src={actual.url} type="video/mp4" /></video>
-        <div className="bg-navy px-4 py-2 font-display text-lg text-white">¿Qué seña es?</div>
+        <video ref={video} playsInline muted loop autoPlay preload="auto" poster={actual.poster ?? undefined} className="mx-auto block max-h-[20vh] w-full bg-black md:max-h-[45vh]"><source src={actual.url} type="video/mp4" /></video>
+        <div className="bg-navy px-3 py-1.5 font-display text-base text-white md:px-4 md:py-2 md:text-lg">¿Qué seña es?</div>
       </div>
       <div>
         <p className="mb-2 text-sm font-bold text-mist">{aciertos} de {items.length} · quedan {pendientes.length}</p>
