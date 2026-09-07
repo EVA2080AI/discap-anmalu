@@ -1,6 +1,6 @@
 /* Service worker sencillo: guarda la app en caché para que abra sin internet.
    Las fotos y videos se guardan a medida que se van viendo. */
-const CACHE = "anmalu-v2";
+const CACHE = "anmalu-v3";
 const BASE = ["./", "index.html", "css/style.css", "js/datos.js", "js/app.js", "manifest.json"];
 
 self.addEventListener("install", e => {
@@ -19,16 +19,26 @@ self.addEventListener("fetch", e => {
   const url = new URL(e.request.url);
   if (url.origin !== location.origin) return; // fuentes externas: siempre red
 
-  // Videos: red primero (son pesados), sin guardarlos en caché
+  // Videos: red directa, sin guardarlos en caché (son pesados)
   if (url.pathname.includes("/video/")) return;
 
-  e.respondWith(
-    caches.match(e.request).then(cacheado => {
-      const red = fetch(e.request).then(resp => {
+  // Fotos: caché primero (no cambian), y si no está, red
+  if (url.pathname.includes("/img/") || url.pathname.includes("/icons/")) {
+    e.respondWith(
+      caches.match(e.request).then(hit => hit || fetch(e.request).then(resp => {
         if (resp.ok) caches.open(CACHE).then(c => c.put(e.request, resp.clone()));
         return resp;
-      }).catch(() => cacheado);
-      return cacheado || red;
-    })
+      }))
+    );
+    return;
+  }
+
+  // Código (html, css, js): RED PRIMERO para que las mejoras se vean al instante;
+  // la caché solo se usa si no hay internet.
+  e.respondWith(
+    fetch(e.request).then(resp => {
+      if (resp.ok) caches.open(CACHE).then(c => c.put(e.request, resp.clone()));
+      return resp;
+    }).catch(() => caches.match(e.request))
   );
 });
