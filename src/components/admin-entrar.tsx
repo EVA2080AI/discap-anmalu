@@ -32,7 +32,7 @@ export function AdminEntrar() {
         <button type="submit" disabled={cargando || !clave} className="btn-principal">Entrar</button>
       </form>
       {error && <p role="alert" className="mt-3 font-bold text-coral">{error}</p>}
-      <p className="mt-4 text-sm text-mist">¿No tienes clave? Pídesela a tu profe o a Guido.</p>
+      <p className="mt-4 text-sm text-mist">¿No tienes clave? Pídesela a tu profe o escribe a discap.amalu@gmail.com</p>
     </div>
   );
 }

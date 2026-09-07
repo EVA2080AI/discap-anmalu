@@ -33,7 +33,7 @@ export default function Consentimiento() {
           <div><p>Fecha: {linea}</p><p className="text-sm text-mist">Ciudad: {linea}</p></div>
         </div>
 
-        <p className="mt-6 text-xs text-mist">Responsable del proyecto: Guido Gamba. Política de privacidad: discap-anmalu.vercel.app/privacidad</p>
+        <p className="mt-6 text-xs text-mist">Responsables del proyecto: Ana Lucía, Antonella y María Paula. Contacto: discap.amalu@gmail.com · Política de privacidad: discap-anmalu.vercel.app/privacidad</p>
       </div>
     </article>
   );

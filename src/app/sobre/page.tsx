@@ -43,7 +43,7 @@ export default function Sobre() {
           Es una app para <strong className="text-ink">aprender y usar la Lengua de Señas Colombiana (LSC)</strong>. Escribes una palabra y la ves en señas, letra por letra, con las fotos de tres niñas que las hacen. También tiene videos de saludos, familia y colores, un juego para practicar y un buzón para que nos cuentes tus ideas.
         </p>
         <p className="mx-auto mt-3 max-w-xl text-mist">
-          La hicieron <strong className="text-ink">Ana Lucía, Antonella y María Paula</strong> como proyecto escolar para la <strong className="text-ink">Feria Inspírate 2026</strong>, con el apoyo de Guido Gamba. Es la evolución de la app que presentaron el año pasado. La idea es sencilla: que cualquier persona pueda decir algo con las manos a alguien que no oye.
+          La hicieron <strong className="text-ink">Ana Lucía, Antonella y María Paula</strong> como proyecto escolar para la <strong className="text-ink">Feria Inspírate 2026</strong>. Es la evolución de la app que presentaron el año pasado. La idea es sencilla: que cualquier persona pueda decir algo con las manos a alguien que no oye.
         </p>
       </section>
 

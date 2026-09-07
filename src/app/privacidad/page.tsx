@@ -34,7 +34,7 @@ export default function Privacidad() {
 
       <section className="tarjeta mt-4 p-5">
         <h2 className="mb-2 text-xl font-extrabold text-navy-deep">Tus derechos</h2>
-        <p className="text-[15px]">Puedes pedir que borremos una idea que escribiste o una foto en la que apareces. Escríbelo en el <Link href="/ideas" className="font-bold text-navy underline">Buzón de ideas</Link> con el tipo «Algo no funciona» o díselo a Guido Gamba, responsable del proyecto.</p>
+        <p className="text-[15px]">Puedes pedir que borremos una idea que escribiste o una foto en la que apareces. Escríbelo en el <Link href="/ideas" className="font-bold text-navy underline">Buzón de ideas</Link> con el tipo «Algo no funciona» o escribe a <b>discap.amalu@gmail.com</b>.</p>
       </section>
     </article>
   );

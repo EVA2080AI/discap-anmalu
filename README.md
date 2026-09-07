@@ -97,14 +97,15 @@ Las fotos y videos originales no están en la base de datos: viven en `public/` 
 | Clave | Quién | Qué pasa al subir |
 |---|---|---|
 | **Alumna** | Ana Lucía, Antonella, María Paula y compañeras | Queda **pendiente**; un admin la revisa en *Por aprobar*. |
-| **Admin** | Guido, profes | Se **publica al instante**. También crea categorías nuevas. |
+| **Admin** | Las creadoras, profes | Se **publica al instante**. También crea categorías nuevas. |
 
 La foto se reduce sola a 800 px antes de subir. Los videos: verticales, 1 a 3 segundos, máximo 25 MB. La clave nunca se guarda en el celular: se cambia por un pase que caduca a las 12 horas.
 
 ## Créditos
 
 - Señas y fotos: Ana Lucía, Antonella y María Paula.
-- Idea y coordinación: Guido Gamba.
+- Idea y creación: Ana Lucía, Antonella y María Paula.
+- Contacto: discap.amalu@gmail.com
 - Señas formales: material "Inclusión al día".
 - Desarrollo: Juan Sebastián Másmela.
 

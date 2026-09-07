@@ -5,7 +5,7 @@ import { rolDeClave, crearSesion, cerrarSesion, rolActual } from "@/lib/auth";
 export async function POST(req: Request) {
   const { clave } = await req.json().catch(() => ({}));
   const rol = rolDeClave(String(clave ?? ""));
-  if (!rol) return NextResponse.json({ error: "Esa clave no es. Pídesela a tu profe o a Guido." }, { status: 401 });
+  if (!rol) return NextResponse.json({ error: "Esa clave no es. Pídesela a tu profe o escribe a discap.amalu@gmail.com" }, { status: 401 });
   await crearSesion(rol);
   return NextResponse.json({ rol });
 }
