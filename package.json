@@ -1,0 +1,8 @@
+{
+  "name": "discap-anmalu",
+  "private": true,
+  "description": "DISCAP ANMALU · Traductor de Lengua de Señas Colombiana",
+  "dependencies": {
+    "@vercel/blob": "^2.8.0"
+  }
+}

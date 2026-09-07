@@ -1,6 +1,6 @@
 /* Service worker sencillo: guarda la app en caché para que abra sin internet.
    Las fotos y videos se guardan a medida que se van viendo. */
-const CACHE = "anmalu-v4";
+const CACHE = "anmalu-v5";
 importScripts("js/datos.js"); // trae LETRAS, AVATARES y archivoLetra()
 const BASE = ["./", "index.html", "css/style.css", "js/datos.js", "js/app.js", "manifest.json", "icons/icon-192.png", "icons/icon-512.png"];
 
@@ -35,6 +35,8 @@ self.addEventListener("fetch", e => {
 
   // Videos: red directa, sin guardarlos en caché (son pesados)
   if (url.pathname.includes("/video/")) return;
+  // API y zona de subidas: siempre red, nunca caché
+  if (url.pathname.startsWith("/api/") || url.pathname.startsWith("/admin")) return;
 
   // Fotos: caché primero (no cambian), y si no está, red
   if (url.pathname.includes("/img/") || url.pathname.includes("/icons/")) {

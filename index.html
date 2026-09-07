@@ -64,6 +64,11 @@
       </a>
     </nav>
 
+    <a class="tarjeta-buzon" href="#ideas">
+      <span class="emoji" aria-hidden="true">💌</span>
+      <span><b>Buzón de ideas</b><br><small>Cuéntanos qué te gustó o qué mejorarías</small></span>
+    </a>
+
     <p class="pie-inicio">Proyecto escolar · Feria Inspírate 2026</p>
   </section>
 
@@ -115,7 +120,7 @@
           <span class="letra-grande" id="letraGrande">A</span>
         </div>
         <div class="etiqueta-avatar" id="nombreAvatar">Ana Lucía</div>
-        <div class="aviso-pausa" id="avisoPausa" hidden>espacio</div>
+        <div class="aviso-pausa" id="avisoPausa" hidden><span class="manos" aria-hidden="true">🤲</span><span>siguiente palabra</span></div>
       </div>
 
       <div class="palabra-progreso" id="palabraProgreso" aria-live="polite"></div>
@@ -143,17 +148,7 @@
   <section class="pantalla" id="expresiones">
     <h1 class="titulo-pantalla">🎬 Expresiones</h1>
 
-    <div class="categorias" id="categorias">
-      <button class="categoria activo" data-categoria="saludos">
-        <span class="emoji" aria-hidden="true">👋</span>Saludos
-      </button>
-      <button class="categoria" data-categoria="familia">
-        <span class="emoji" aria-hidden="true">👨‍👩‍👧</span>Familia
-      </button>
-      <button class="categoria" data-categoria="colores">
-        <span class="emoji" aria-hidden="true">🎨</span>Colores
-      </button>
-    </div>
+    <div class="categorias" id="categorias" aria-label="Categorías"></div>
 
     <div class="reproductor" id="reproductor" hidden>
       <video id="video" playsinline muted controls preload="none"></video>
@@ -163,11 +158,34 @@
     <div class="expresiones-lista" id="listaExpresiones"></div>
   </section>
 
+  <!-- ===== Pantalla: Buzón de ideas ===== -->
+  <section class="pantalla" id="ideas">
+    <h1 class="titulo-pantalla">💌 Buzón de ideas</h1>
+    <p class="ayuda">Tu idea llega directo a Ana Lucía, Antonella y María Paula. Cuando la hagan, aquí aparece ✅.</p>
+
+    <form class="form-idea" id="formIdea">
+      <div class="tipos-idea" role="radiogroup" aria-label="¿Qué quieres contarnos?">
+        <button type="button" class="tipo-idea activo" data-tipo="idea" role="radio" aria-checked="true"><span class="emoji" aria-hidden="true">💡</span>Tengo una idea</button>
+        <button type="button" class="tipo-idea" data-tipo="error" role="radio" aria-checked="false"><span class="emoji" aria-hidden="true">🐞</span>Algo no funciona</button>
+        <button type="button" class="tipo-idea" data-tipo="gusto" role="radio" aria-checked="false"><span class="emoji" aria-hidden="true">⭐</span>Me gustó</button>
+      </div>
+      <input type="text" id="ideaNombre" class="campo-idea" placeholder="Tu nombre (o déjalo vacío)" maxlength="40" autocomplete="name">
+      <textarea id="ideaMensaje" class="campo-idea" rows="3" placeholder="Escribe aquí… por ejemplo: «quiero los números en señas»" maxlength="400" required></textarea>
+      <button type="submit" class="btn-primario btn-enviar">Enviar 🚀</button>
+      <p class="resultado-idea" id="resultadoIdea" role="status" hidden></p>
+    </form>
+
+    <div class="bloque">
+      <h3>Ideas de todos</h3>
+      <div class="lista-ideas" id="listaIdeas"><p class="ayuda">Cargando…</p></div>
+    </div>
+  </section>
+
 </main>
 
 <footer class="pie">
   <span>DISCAP ANMALU © 2026</span>
-  <a href="https://github.com/EVA2080AI/discap-anmalu/issues" target="_blank" rel="noopener">Sugerir mejora</a>
+  <span><a href="#ideas">💌 Buzón de ideas</a> · <a href="admin/">Subir fotos y videos</a></span>
 </footer>
 
 <script defer src="/_vercel/insights/script.js"></script>

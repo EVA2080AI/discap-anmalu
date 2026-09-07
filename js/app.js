@@ -31,7 +31,7 @@ function elegirAleatorio(lista) {
 // =====================================================================
 // 1. NAVEGACIÓN
 // =====================================================================
-const PANTALLAS = ["inicio", "traductor", "expresiones"];
+const PANTALLAS = ["inicio", "traductor", "expresiones", "ideas"];
 
 function mostrarPantalla(id) {
   if (!PANTALLAS.includes(id)) id = "inicio";
@@ -40,6 +40,7 @@ function mostrarPantalla(id) {
   window.scrollTo({ top: 0 });
   if (id !== "expresiones") pausarVideo();
   if (id !== "traductor") detenerReproduccion();
+  if (id === "ideas") cargarIdeas();
 }
 
 window.addEventListener("hashchange", () => mostrarPantalla(location.hash.slice(1)));
@@ -135,7 +136,8 @@ function mostrarLetra(i) {
 
   const esEspacio = letra === " ";
   $("#avisoPausa").hidden = !esEspacio;
-  if (esEspacio) return; // dejamos la foto anterior y mostramos "espacio"
+  $(".tarjeta-sena").classList.toggle("pausa", esEspacio);
+  if (esEspacio) return; // tarjeta neutra entre palabras
 
   pintarSena(letra, avatar);
 }
@@ -161,6 +163,12 @@ function pintarSena(letra, avatarId) {
     $("#nombreAvatar").textContent = avatar.nombre;
   }
 }
+
+// Tocar el recuadro de la seña formal lo amplía (y vuelve a reducir)
+$(".recuadro-formal").addEventListener("click", () => {
+  const t = $(".tarjeta-sena");
+  if (!t.classList.contains("solo-formal")) t.classList.toggle("ampliada");
+});
 
 // --- Reproducción automática ---
 function iniciarReproduccion() {
@@ -223,19 +231,40 @@ $("#btnSiguiente").addEventListener("click", () => { detenerReproduccion(); most
 // =====================================================================
 // 3. EXPRESIONES
 // =====================================================================
-let categoriaActual = "saludos";
+// El contenido vive en datos/expresiones.json; se carga al arrancar.
+let EXPRESIONES = {};
+let categoriaActual = "";
 
-$$(".categoria").forEach(btn => btn.addEventListener("click", () => {
-  $$(".categoria").forEach(b => b.classList.remove("activo"));
-  btn.classList.add("activo");
-  categoriaActual = btn.dataset.categoria;
+async function cargarExpresiones() {
+  try {
+    EXPRESIONES = await (await fetch("datos/expresiones.json")).json();
+  } catch { EXPRESIONES = {}; }
+  const cont = $("#categorias");
+  cont.innerHTML = "";
+  Object.entries(EXPRESIONES).forEach(([id, cat], i) => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "categoria" + (i === 0 ? " activo" : "");
+    b.dataset.categoria = id;
+    b.innerHTML = `<span class="emoji" aria-hidden="true">${cat.emoji || "🎬"}</span>${cat.titulo}`;
+    b.addEventListener("click", () => {
+      $$(".categoria").forEach(x => x.classList.remove("activo"));
+      b.classList.add("activo");
+      categoriaActual = id;
+      pintarExpresiones();
+    });
+    cont.appendChild(b);
+  });
+  cont.style.setProperty("--n", Math.min(4, Object.keys(EXPRESIONES).length || 1));
+  categoriaActual = Object.keys(EXPRESIONES)[0] || "";
   pintarExpresiones();
-}));
+}
 
 function pintarExpresiones() {
   const cat = EXPRESIONES[categoriaActual];
   const cont = $("#listaExpresiones");
   cont.innerHTML = "";
+  if (!cat) return;
   cat.items.forEach(item => {
     const b = document.createElement("button");
     b.type = "button";
@@ -256,6 +285,7 @@ function reproducirExpresion(item) {
   rep.hidden = false;
   $("#videoTitulo").textContent = `${EXPRESIONES[categoriaActual].emoji} ${item.nombre}`;
   video.src = `video/${categoriaActual}/${item.archivo}`;
+  video.poster = `video/${categoriaActual}/${item.archivo.replace(/\.mp4$/, ".jpg")}`; // póster: primer cuadro
   video.load();
   video.play().catch(() => {/* el usuario puede darle play manualmente */});
   registrarEvento("video", { categoria: categoriaActual, nombre: item.nombre });
@@ -268,7 +298,56 @@ function pausarVideo() {
   if (v && !v.paused) v.pause();
 }
 
-pintarExpresiones();
+cargarExpresiones();
+
+// =====================================================================
+// 4. BUZÓN DE IDEAS
+// =====================================================================
+const TIPO_EMOJI = { idea: "💡", error: "🐞", gusto: "⭐" };
+const ESTADO_TEXTO = { nueva: "🌱 Nueva", "en-proceso": "🛠️ En proceso", lista: "✅ ¡Lista!" };
+let tipoIdea = "idea";
+
+$$(".tipo-idea").forEach(b => b.addEventListener("click", () => {
+  $$(".tipo-idea").forEach(x => { x.classList.remove("activo"); x.setAttribute("aria-checked", "false"); });
+  b.classList.add("activo"); b.setAttribute("aria-checked", "true");
+  tipoIdea = b.dataset.tipo;
+}));
+
+$("#formIdea").addEventListener("submit", async e => {
+  e.preventDefault();
+  const btn = $(".btn-enviar"), res = $("#resultadoIdea");
+  btn.disabled = true; res.hidden = true;
+  try {
+    const r = await fetch("api/tickets", { method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ tipo: tipoIdea, nombre: $("#ideaNombre").value, mensaje: $("#ideaMensaje").value }) });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || "No se pudo enviar");
+    res.textContent = "🎉 ¡Gracias! Tu idea ya está en el buzón.";
+    res.className = "resultado-idea ok"; res.hidden = false;
+    $("#ideaMensaje").value = "";
+    registrarEvento("idea", { tipo: tipoIdea });
+    cargarIdeas();
+  } catch (ex) {
+    res.textContent = "😕 " + ex.message; res.className = "resultado-idea mal"; res.hidden = false;
+  } finally { btn.disabled = false; }
+});
+
+async function cargarIdeas() {
+  const cont = $("#listaIdeas");
+  try {
+    const lista = await (await fetch("api/tickets", { cache: "no-store" })).json();
+    cont.innerHTML = lista.length ? "" : '<p class="ayuda">Sé la primera persona en dejar una idea. 🌱</p>';
+    lista.forEach(t => {
+      const el = document.createElement("article");
+      el.className = "idea";
+      el.innerHTML = `<header><span class="tipo" aria-hidden="true">${TIPO_EMOJI[t.tipo] || "💬"}</span><span class="nombre"></span><span class="estado ${t.estado}">${ESTADO_TEXTO[t.estado] || t.estado}</span></header><p class="mensaje"></p>`;
+      $(".nombre", el).textContent = t.nombre;
+      $(".mensaje", el).textContent = t.mensaje;
+      if (t.respuesta) { const r = document.createElement("p"); r.className = "respuesta"; r.textContent = "💬 " + t.respuesta; el.appendChild(r); }
+      cont.appendChild(el);
+    });
+  } catch { cont.innerHTML = '<p class="ayuda">No pude cargar las ideas. ¿Hay internet?</p>'; }
+}
 
 // =====================================================================
 // Arranque
