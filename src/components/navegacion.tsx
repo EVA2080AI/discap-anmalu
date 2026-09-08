@@ -28,21 +28,21 @@ export function Navegacion() {
     <>
       <VigilanteFeria ruta={ruta} />
       <header className="sticky top-0 z-20 bg-navy text-white shadow-[0_4px_18px_rgba(0,0,0,.15)]">
-        <div className="mx-auto flex max-w-3xl items-center gap-3 px-4 py-2.5 md:px-6">
-          <Link href="/" className="flex items-center gap-2" aria-label="Inicio">
+        <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-2.5 md:px-6">
+          <Link href="/" className="flex items-center gap-2 shrink-0" aria-label="Inicio">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/icons/logo-mark.svg" alt="" width={34} height={34} className="size-8" />
-            <span className="font-display text-xl font-extrabold tracking-wide">
+            <img src="/icons/logo-mark.svg" alt="" width={34} height={34} className="size-8 shrink-0" />
+            <span className="whitespace-nowrap font-display text-xl font-extrabold tracking-wide">
               DISCAP <b className="text-lime">ANMALU</b>
             </span>
           </Link>
-          <nav className="ml-auto hidden items-center gap-1 md:flex" aria-label="Secciones">
+          <nav className="ml-auto hidden items-center gap-1 xl:flex" aria-label="Secciones">
             {RUTAS.map(({ href, texto, Icono }) => (
               <Link
                 key={href}
                 href={href}
                 className={cn(
-                  "flex items-center gap-2 rounded-full px-3.5 py-2 font-bold transition-colors",
+                  "flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-3.5 py-2 font-bold transition-colors",
                   activa(href) ? "bg-white/15 text-sun" : "text-white/85 hover:bg-white/10",
                 )}
               >
@@ -53,7 +53,7 @@ export function Navegacion() {
             <Link
               href="/proyecto"
               className={cn(
-                "flex items-center gap-2 rounded-full px-3.5 py-2 font-bold transition-colors",
+                "flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-3.5 py-2 font-bold transition-colors",
                 ruta.startsWith("/proyecto") ? "bg-white/15 text-sun" : "text-white/85 hover:bg-white/10",
               )}
             >
@@ -61,7 +61,7 @@ export function Navegacion() {
               El proyecto
             </Link>
           </nav>
-          <Link href="/sobre" className="ml-auto rounded-full bg-sun px-3 py-1 text-xs font-extrabold tracking-widest text-navy-deep md:ml-2" aria-label="Qué es y cómo se usa">
+          <Link href="/sobre" className="ml-auto shrink-0 whitespace-nowrap rounded-full bg-sun px-3 py-1 text-xs font-extrabold tracking-widest text-navy-deep xl:ml-2" aria-label="Qué es y cómo se usa">
             {esAdmin ? "SUBIDAS" : "¿QUÉ ES?"}
           </Link>
           <Ajustes />
@@ -70,7 +70,7 @@ export function Navegacion() {
 
       {!esAdmin && (
         <nav
-          className="fixed inset-x-0 bottom-0 z-20 border-t border-line bg-white/95 backdrop-blur md:hidden"
+          className="fixed inset-x-0 bottom-0 z-20 border-t border-line bg-white/95 backdrop-blur xl:hidden"
           style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
           aria-label="Secciones"
         >

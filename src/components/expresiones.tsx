@@ -77,7 +77,7 @@ export function Expresiones({ categorias }: { categorias: Categoria[] }) {
         </div>
       )}
 
-      <div className="md:grid md:grid-cols-[minmax(260px,320px)_1fr] md:items-start md:gap-6">
+      <div className={cn(actual && "md:grid md:grid-cols-[minmax(260px,320px)_1fr] md:items-start md:gap-6")}>
         {actual && (
           <div className="mb-4 md:sticky md:top-20">
             <div className="tarjeta overflow-hidden bg-black">
@@ -105,25 +105,21 @@ export function Expresiones({ categorias }: { categorias: Categoria[] }) {
           </div>
         )}
 
-        <div className={cn("grid gap-3", actual ? "grid-cols-2 sm:grid-cols-3" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4")}>
+        <div className={cn("grid gap-3", actual ? "grid-cols-2 sm:grid-cols-3" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4")}>
           {lista.map(item => (
-            <div key={item.id} className="relative">
-              <button
-                type="button"
-                onClick={() => setActual(item)}
-                className={cn("ficha w-full flex-row justify-start gap-3 px-3 py-3 pr-11 text-left text-base", actual?.id === item.id && "border-navy")}
-              >
+            <div key={item.id} className={cn("ficha w-full flex-row items-center justify-start gap-2 px-3 py-3 pr-1 text-left text-base", actual?.id === item.id && "border-navy")}>
+              <button type="button" onClick={() => setActual(item)} className="flex min-w-0 flex-1 items-center gap-2 text-left">
                 {item.color ? (
                   <span className="size-6 shrink-0 rounded-full border-2 border-line" style={{ background: item.color }} aria-hidden="true" />
                 ) : (
-                  <span className="text-xl" aria-hidden="true">{item.emoji}</span>
+                  <span className="shrink-0 text-xl" aria-hidden="true">{item.emoji}</span>
                 )}
-                <span>
+                <span className="min-w-0 break-words">
                   {item.nombre}
                   {(buscando || activa === "__favoritos__" || activa === "__todas__") && <small className="block text-xs font-semibold text-mist">{item.categoria}</small>}
                 </span>
               </button>
-              <button type="button" onClick={() => alternarFavorito(item.id)} aria-pressed={favoritos.includes(item.id)} aria-label={`Favorito: ${item.nombre}`} className="absolute right-1 top-1/2 grid size-9 -translate-y-1/2 place-items-center rounded-full text-mist">
+              <button type="button" onClick={() => alternarFavorito(item.id)} aria-pressed={favoritos.includes(item.id)} aria-label={`Favorito: ${item.nombre}`} className="grid size-9 shrink-0 place-items-center rounded-full text-mist">
                 <Star className={cn("size-5", favoritos.includes(item.id) && "fill-sun text-sun")} />
               </button>
             </div>
