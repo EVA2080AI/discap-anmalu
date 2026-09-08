@@ -5,20 +5,20 @@ import { Target, BookMarked, FlaskConical, Trophy, HandHeart, ArrowRight, School
 import { fotoOriginal } from "@/lib/datos";
 import {
   CREADORAS, COLEGIO, PROBLEMA, OBJETIVO_GENERAL, OBJETIVOS_ESPECIFICOS,
-  MARCO_TEORICO, METODOLOGIA, HISTORIA, LOGRO_DESTACADO, BASTON,
+  MARCO_TEORICO, METODOLOGIA, HISTORIA, LOGRO_DESTACADO, BASTON, GALERIA_EQUIPO,
 } from "@/lib/contenido";
 
 export const metadata: Metadata = {
-  title: "El proyecto",
+  title: "Historia",
   description: "La historia de DISCAP ANMALU: el problema, los objetivos, la metodología y cómo tres niñas lo llevaron de una idea de clase a una app real.",
 };
 
-export default function Proyecto() {
+export default function Historia() {
   return (
     <div className="aparecer">
       {/* ---------- Portada ---------- */}
       <section className="overflow-hidden rounded-card bg-gradient-to-br from-navy via-navy to-[#2f63c9] px-6 py-10 text-center text-white shadow-lift md:py-14">
-        <p className="font-display text-sm font-extrabold uppercase tracking-[0.2em] text-sun">El proyecto</p>
+        <p className="font-display text-sm font-extrabold uppercase tracking-[0.2em] text-sun">Historia</p>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/icons/logo-mark.svg" alt="" width={92} height={92} className="mx-auto mt-3 size-20 md:size-24" />
         <h1 className="mt-3 font-display text-4xl font-extrabold md:text-5xl">
@@ -52,12 +52,15 @@ export default function Proyecto() {
       </section>
 
       {/* ---------- Logro destacado ---------- */}
-      <section className="mt-6 flex flex-col items-center gap-3 rounded-card bg-sun-soft p-5 text-center sm:flex-row sm:text-left">
-        <span className="grid size-16 shrink-0 place-items-center rounded-2xl bg-sun text-navy-deep"><Trophy className="size-9" aria-hidden="true" /></span>
-        <p className="text-[15px]">
-          <b className="font-display text-2xl text-navy-deep">{LOGRO_DESTACADO.puntos} puntos.</b>{" "}
-          Eso lograron en la {LOGRO_DESTACADO.contexto.toLowerCase()}, la primera vez que presentaron el proyecto fuera del colegio.
-        </p>
+      <section className="mt-6 overflow-hidden rounded-card bg-sun-soft sm:flex sm:items-center">
+        <div className="flex flex-col items-center gap-3 p-5 text-center sm:flex-row sm:text-left">
+          <span className="grid size-16 shrink-0 place-items-center rounded-2xl bg-sun text-navy-deep"><Trophy className="size-9" aria-hidden="true" /></span>
+          <p className="text-[15px]">
+            <b className="font-display text-2xl text-navy-deep">{LOGRO_DESTACADO.puntos} puntos.</b>{" "}
+            Eso lograron en la {LOGRO_DESTACADO.contexto.toLowerCase()}, la primera vez que presentaron el proyecto fuera del colegio.
+          </p>
+        </div>
+        <Image src={LOGRO_DESTACADO.foto.src} alt={LOGRO_DESTACADO.foto.alt} width={500} height={500} className="mx-auto max-h-56 w-auto object-contain p-3 sm:ml-auto sm:mr-5" />
       </section>
 
       {/* ---------- El problema ---------- */}
@@ -119,6 +122,13 @@ export default function Proyecto() {
                 <ul className="mt-2 grid list-disc gap-1.5 pl-5 text-[15px]">
                   {h.items.map((it, i) => <li key={i}>{it}</li>)}
                 </ul>
+                {h.fotos && (
+                  <div className="mt-4 grid grid-cols-3 gap-2">
+                    {h.fotos.map(f => (
+                      <Image key={f.src} src={f.src} alt={f.alt} width={300} height={300} className="aspect-square w-full rounded-xl object-cover shadow-soft" />
+                    ))}
+                  </div>
+                )}
               </div>
             </li>
           ))}
@@ -126,11 +136,18 @@ export default function Proyecto() {
       </section>
 
       {/* ---------- El bastón (segundo prototipo) ---------- */}
-      <section className="tarjeta mt-10 flex flex-col items-center gap-4 p-6 text-center sm:flex-row sm:text-left">
-        <span className="grid size-16 shrink-0 place-items-center rounded-2xl bg-navy-soft text-navy"><HandHeart className="size-9" aria-hidden="true" /></span>
-        <div>
-          <h2 className="font-display text-xl text-navy-deep">{BASTON.titulo}</h2>
-          <p className="mt-1 text-[15px] text-mist">{BASTON.texto}</p>
+      <section className="tarjeta mt-10 p-6">
+        <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:text-left">
+          <span className="grid size-16 shrink-0 place-items-center rounded-2xl bg-navy-soft text-navy"><HandHeart className="size-9" aria-hidden="true" /></span>
+          <div>
+            <h2 className="font-display text-xl text-navy-deep">{BASTON.titulo}</h2>
+            <p className="mt-1 text-[15px] text-mist">{BASTON.texto}</p>
+          </div>
+        </div>
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          {BASTON.fotos.map(f => (
+            <Image key={f.src} src={f.src} alt={f.alt} width={500} height={350} className="h-48 w-full rounded-xl object-cover shadow-soft" />
+          ))}
         </div>
       </section>
 
@@ -148,6 +165,11 @@ export default function Proyecto() {
           ))}
         </div>
         <p className="mt-4 flex items-center justify-center gap-1.5 text-center text-sm text-mist"><School className="size-4" aria-hidden="true" /> {COLEGIO}</p>
+        <div className="mt-5 grid grid-cols-4 gap-2">
+          {GALERIA_EQUIPO.map(f => (
+            <Image key={f.src} src={f.src} alt={f.alt} width={300} height={300} className="aspect-square w-full rounded-xl object-cover shadow-soft" />
+          ))}
+        </div>
       </section>
 
       {/* ---------- Cierre ---------- */}

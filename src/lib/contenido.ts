@@ -51,7 +51,7 @@ export const FUENTES = [
 export const FRASES_PENDIENTES = ["Necesito ayuda", "No entiendo", "¿Dónde está el baño?", "Gracias", "Por favor", "Lo siento", "¿Cómo te llamas?", "Me llamo…", "¿Puedes repetir?", "Escríbelo, por favor"];
 
 /* =====================================================================
-   LA HISTORIA DEL PROYECTO (para /proyecto)
+   LA HISTORIA DEL PROYECTO (para /historia)
    Contenido tomado del sitio de presentación del proyecto (Canva) que
    Ana Lucía, Antonella y María Paula prepararon para la feria escolar.
    Editar aquí para actualizar la landing sin tocar componentes.
@@ -89,7 +89,8 @@ export const METODOLOGIA = {
   alcanceDetalle: "se busca describir cómo la persona percibe su entorno y explorar nuevas formas de cerrar la brecha de comunicación con las personas cercanas.",
 };
 
-export type HitoHistoria = { anio: string; titulo: string; items: string[] };
+export type FotoHistoria = { src: string; alt: string };
+export type HitoHistoria = { anio: string; titulo: string; items: string[]; fotos?: FotoHistoria[] };
 export const HISTORIA: HitoHistoria[] = [
   {
     anio: "2025",
@@ -100,6 +101,11 @@ export const HISTORIA: HitoHistoria[] = [
       "Imagen corporativa: primer boceto, primer empaque y el manejo de la imagen dentro de la app.",
       "Por invitación del colegio, participaron en una feria de niños investigadores y lograron 96 puntos.",
       "Presentaron el proyecto en Inspírate 2025, la feria de emprendimiento del colegio.",
+    ],
+    fotos: [
+      { src: "/img/historia/app-primera-version.png", alt: "Ana Lucía, Antonella y María Paula mostrando la primera versión de la app en sus celulares" },
+      { src: "/img/historia/baston-azotea.png", alt: "Las tres creadoras sonriendo con el prototipo del bastón con sensor" },
+      { src: "/img/historia/evento-escenario.jpg", alt: "Recibiendo su certificado en el Encuentro Kids: Infancias Investigadoras" },
     ],
   },
   {
@@ -114,9 +120,24 @@ export const HISTORIA: HitoHistoria[] = [
   },
 ];
 
-export const LOGRO_DESTACADO = { puntos: 96, contexto: "Feria de niños investigadores, por invitación del colegio" };
+export const LOGRO_DESTACADO = {
+  puntos: 96,
+  contexto: "Feria de niños investigadores, por invitación del colegio",
+  foto: { src: "/img/historia/resultados-destacados.jpg", alt: "Cartel de resultados del Semillero Kids: DISCAP ANMALU obtuvo 96 puntos en Ciencias Humanas" },
+};
 
 export const BASTON = {
   titulo: "Bastón de mano con sensor de proximidad",
   texto: "El segundo prototipo de DISCAP ANMALU: un bastón pensado para facilitar el desplazamiento autónomo de personas con discapacidad visual, detectando obstáculos antes de que la persona los toque. Es un desarrollo físico, aparte de esta app.",
+  fotos: [
+    { src: "/img/historia/baston-prueba-interior.png", alt: "Probando el bastón con sensor de proximidad frente a una puerta" },
+    { src: "/img/historia/baston-prueba-balcon.png", alt: "Probando el alcance del sensor del bastón en un balcón" },
+  ],
 };
+
+export const GALERIA_EQUIPO = [
+  { src: "/img/historia/sena-hola.png", alt: "Seña de «hola»" },
+  { src: "/img/historia/sena-te-quiero.png", alt: "Seña de «te quiero»" },
+  { src: "/img/historia/sena-yo.png", alt: "Seña de «yo»" },
+  { src: "/img/historia/certificados-pasillo.jpg", alt: "Las tres creadoras con sus certificados de participación" },
+];

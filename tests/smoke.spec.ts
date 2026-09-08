@@ -61,7 +61,7 @@ test("privacidad y docentes existen", async ({ page }) => {
 });
 
 test("la landing del proyecto cuenta la historia", async ({ page }) => {
-  await page.goto(BASE + "/proyecto");
+  await page.goto(BASE + "/historia");
   await expect(page.getByRole("heading", { name: /DISCAP/ })).toBeVisible();
   await expect(page.getByText("96 puntos.", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Creadoras de una gran idea" })).toBeVisible();

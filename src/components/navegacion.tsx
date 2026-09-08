@@ -51,14 +51,14 @@ export function Navegacion() {
               </Link>
             ))}
             <Link
-              href="/proyecto"
+              href="/historia"
               className={cn(
                 "flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-3.5 py-2 font-bold transition-colors",
-                ruta.startsWith("/proyecto") ? "bg-white/15 text-sun" : "text-white/85 hover:bg-white/10",
+                ruta.startsWith("/historia") ? "bg-white/15 text-sun" : "text-white/85 hover:bg-white/10",
               )}
             >
               <Sparkles className="size-4" aria-hidden="true" />
-              El proyecto
+              Historia
             </Link>
           </nav>
           <Link href="/sobre" className="ml-auto shrink-0 whitespace-nowrap rounded-full bg-sun px-3 py-1 text-xs font-extrabold tracking-widest text-navy-deep xl:ml-2" aria-label="Qué es y cómo se usa">

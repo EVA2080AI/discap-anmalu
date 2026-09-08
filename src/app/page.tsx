@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Hand, Clapperboard, BookOpenCheck, Mailbox, ArrowRight, Info, Presentation, GraduationCap, Sparkles } from "lucide-react";
+import { Hand, Clapperboard, BookOpenCheck, Mailbox, ArrowRight, Info, Presentation, Sparkles } from "lucide-react";
 import { TuProgreso } from "@/components/tu-progreso";
 
 export default function Inicio() {
@@ -20,7 +20,7 @@ export default function Inicio() {
           Escribe una palabra y mírala en <strong className="text-ink">Lengua de Señas Colombiana</strong>, con Ana Lucía, Antonella y María Paula.
         </p>
         <div className="mt-3 flex flex-wrap items-center justify-center gap-2">
-          <Link href="/proyecto" className="inline-flex min-h-11 items-center gap-1.5 rounded-full bg-sun px-4 text-sm font-extrabold text-navy-deep shadow-soft">
+          <Link href="/historia" className="inline-flex min-h-11 items-center gap-1.5 rounded-full bg-sun px-4 text-sm font-extrabold text-navy-deep shadow-soft">
             <Sparkles className="size-4" aria-hidden="true" /> Conoce el proyecto
           </Link>
           <Link href="/sobre" className="inline-flex min-h-11 items-center gap-1.5 rounded-full bg-white px-4 text-sm font-extrabold text-navy shadow-soft">
@@ -66,7 +66,6 @@ export default function Inicio() {
       <div className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-mist">
         <span>Proyecto escolar · Feria Inspírate 2026</span>
         <Link href="/feria" className="inline-flex min-h-11 items-center gap-1 font-bold text-navy"><Presentation className="size-4" aria-hidden="true" /> Modo feria</Link>
-        <Link href="/docente" className="inline-flex min-h-11 items-center gap-1 font-bold text-navy"><GraduationCap className="size-4" aria-hidden="true" /> Docentes</Link>
       </div>
     </div>
   );

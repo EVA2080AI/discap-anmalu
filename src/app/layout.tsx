@@ -50,11 +50,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <footer className="mx-auto w-full max-w-3xl px-6 pb-28 pt-2 text-center text-xs text-mist md:flex md:items-center md:justify-between md:pb-5 md:text-left md:text-sm">
           <span>DISCAP ANMALU © 2026 · <a href="/novedades" className="hover:underline">v{VERSION}</a></span>
           <span className="mt-1 flex flex-wrap justify-center gap-x-4 gap-y-1 md:mt-0">
-            <a href="/proyecto" className="font-bold text-navy hover:underline">El proyecto</a>
+            <a href="/historia" className="font-bold text-navy hover:underline">Historia</a>
             <a href="/sobre" className="font-bold text-navy hover:underline">Cómo se usa</a>
             <a href="/privacidad" className="font-bold text-navy hover:underline">Privacidad</a>
-            <a href="/docente" className="font-bold text-navy hover:underline">Docentes</a>
-            <a href="/admin" className="font-bold text-navy hover:underline">Subir fotos y videos</a>
           </span>
         </footer>
         <RegistrarSW />

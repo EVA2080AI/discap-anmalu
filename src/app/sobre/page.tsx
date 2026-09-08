@@ -45,7 +45,7 @@ export default function Sobre() {
         <p className="mx-auto mt-3 max-w-xl text-mist">
           La hicieron <strong className="text-ink">Ana Lucía, Antonella y María Paula</strong> como proyecto escolar para la <strong className="text-ink">Feria Inspírate 2026</strong>. Es la evolución de la app que presentaron el año pasado. La idea es sencilla: que cualquier persona pueda decir algo con las manos a alguien que no oye.
         </p>
-        <p className="mt-2"><Link href="/proyecto" className="font-bold text-navy underline">Conoce toda la historia del proyecto →</Link></p>
+        <p className="mt-2"><Link href="/historia" className="font-bold text-navy underline">Conoce toda la historia del proyecto →</Link></p>
       </section>
 
       <section className="mt-10">
